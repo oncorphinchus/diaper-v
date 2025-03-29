@@ -1,0 +1,71 @@
+{
+  "TemplateName": "SQL Server 2022 Developer",
+  "ServerRole": "SQLServer",
+  "Description": "SQL Server Developer edition for development and testing environments",
+  "HardwareConfiguration": {
+    "ProcessorCount": 4,
+    "MemoryGB": 8,
+    "StorageGB": 80,
+    "Generation": 2,
+    "EnableSecureBoot": true
+  },
+  "NetworkConfiguration": {
+    "VirtualSwitch": "Default Switch",
+    "DynamicIP": true,
+    "IPAddress": "",
+    "SubnetMask": "",
+    "DefaultGateway": "",
+    "DNSServers": ""
+  },
+  "OSConfiguration": {
+    "OSVersion": "Windows Server 2022",
+    "TimeZone": 85,
+    "AdminPassword": "",
+    "ComputerName": "SQL-DEV"
+  },
+  "SQLServerConfiguration": {
+    "SQLVersion": "2022",
+    "SQLEdition": "Developer",
+    "SQLFeatures": "SQLENGINE,SSMS",
+    "InstanceName": "MSSQLSERVER",
+    "Authentication": "Windows",
+    "SAPassword": "",
+    "Storage": {
+      "DataDiskGB": 100,
+      "LogDiskGB": 50,
+      "TempDBDiskGB": 50,
+      "BackupDiskGB": 100,
+      "DataPath": "D:\\SQLData",
+      "LogPath": "L:\\SQLLogs",
+      "TempDBPath": "T:\\SQLTempDB",
+      "BackupPath": "B:\\SQLBackup"
+    },
+    "Performance": {
+      "MaxDOP": 0,
+      "CostThreshold": 5,
+      "MinMemoryMB": 1024,
+      "MaxMemoryMB": 6144
+    },
+    "Maintenance": {
+      "CreateMaintenanceJobs": true,
+      "BackupSchedule": "Daily",
+      "IntegrityCheckSchedule": "Weekly",
+      "IndexMaintenanceSchedule": "Weekly"
+    }
+  },
+  "AdditionalConfiguration": {
+    "JoinDomain": false,
+    "DomainName": "",
+    "OrganizationalUnit": "",
+    "DomainUsername": "",
+    "DomainPassword": "",
+    "AutoStartVM": true,
+    "EnableRDP": true
+  },
+  "Metadata": {
+    "Author": "HyperV Creator",
+    "CreatedDate": "2023-03-29T00:00:00",
+    "LastModifiedDate": "2023-03-29T00:00:00",
+    "Version": "1.0"
+  }
+} 

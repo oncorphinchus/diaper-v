@@ -58,7 +58,7 @@
   - [x] Document required parameters for SQL Server
   - [x] Document required parameters for DHCP Server
   - [x] Document required parameters for DNS Server
-  - [ ] Document required parameters for Custom VM
+  - [x] Document required parameters for Custom VM
 
 - [ ] **Template Management Planning**
   - [ ] Define template format and structure
@@ -192,7 +192,7 @@
   - [x] Implement post-installation IIS setup
 
 - [ ] **SQL Server**
-  - [ ] Implement SQL Server configuration form
+  - [x] Implement SQL Server configuration form
   - [x] Create Unattend.xml template for SQL Server
   - [x] Develop PowerShell scripts for SQL Server configuration
   - [x] Implement post-installation SQL Server setup
@@ -234,7 +234,7 @@
   - [ ] Create default template for RDSH
   - [ ] Create default template for File Server
   - [ ] Create default template for Web Server
-  - [ ] Create default template for SQL Server
+  - [x] Create default template for SQL Server
   - [ ] Create default template for DHCP Server
   - [ ] Create default template for DNS Server
   - [x] Create default template for Custom VM
@@ -318,7 +318,7 @@
   - [ ] Test RDSH creation and functionality
   - [ ] Test File Server creation and functionality
   - [ ] Test Web Server creation and functionality
-  - [ ] Test SQL Server creation and functionality
+  - [x] Test SQL Server creation and functionality
   - [ ] Test DHCP Server creation and functionality
   - [ ] Test DNS Server creation and functionality
   - [x] Test Custom VM creation and functionality
