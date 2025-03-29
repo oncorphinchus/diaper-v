@@ -1,0 +1,18 @@
+{
+  "name": "diaper-v",
+  "version": "1.0.0",
+  "description": "A Windows application for creating pre-configured Hyper-V virtual machines with minimal user input.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.4.0"
+  }
+}

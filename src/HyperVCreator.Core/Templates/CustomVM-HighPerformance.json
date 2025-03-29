@@ -1,0 +1,62 @@
+{
+  "TemplateName": "High Performance Custom VM",
+  "ServerRole": "CustomVM",
+  "Description": "A high-performance custom virtual machine configuration",
+  "HardwareConfiguration": {
+    "ProcessorCount": 4,
+    "MemoryGB": 16,
+    "StorageGB": 120,
+    "Generation": 2,
+    "EnableSecureBoot": true,
+    "AdditionalDisks": [
+      {
+        "SizeGB": 100,
+        "Letter": "D",
+        "Label": "Data"
+      },
+      {
+        "SizeGB": 50,
+        "Letter": "E",
+        "Label": "Logs"
+      }
+    ]
+  },
+  "NetworkConfiguration": {
+    "VirtualSwitch": "Default Switch",
+    "DynamicIP": false,
+    "StaticIPConfiguration": {
+      "IPAddress": "192.168.1.100",
+      "SubnetMask": "255.255.255.0",
+      "DefaultGateway": "192.168.1.1",
+      "DNSServers": [
+        "192.168.1.1",
+        "8.8.8.8"
+      ]
+    }
+  },
+  "OSConfiguration": {
+    "OSVersion": "Windows Server 2022 Datacenter",
+    "ProductKey": "",
+    "TimeZone": 85,
+    "AdminPassword": "P@ssw0rd",
+    "ComputerName": "HIGH-PERF-VM",
+    "Organization": "Custom Organization",
+    "Owner": "Administrator"
+  },
+  "AdditionalConfiguration": {
+    "AutoStartVM": true,
+    "UseUnattendXML": true,
+    "EnableRDP": true,
+    "EnablePSRemoting": true
+  },
+  "Metadata": {
+    "CreatedDate": "2023-03-29T00:00:00",
+    "LastModifiedDate": "2023-03-29T00:00:00",
+    "Author": "System",
+    "Tags": [
+      "Custom",
+      "High-Performance",
+      "Multi-Disk"
+    ]
+  }
+} 

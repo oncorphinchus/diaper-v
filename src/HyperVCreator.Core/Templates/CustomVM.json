@@ -1,0 +1,56 @@
+{
+  "TemplateName": "Default Custom VM",
+  "ServerRole": "CustomVM",
+  "Description": "A customizable virtual machine template",
+  "HardwareConfiguration": {
+    "ProcessorCount": 2,
+    "MemoryGB": 4,
+    "StorageGB": 80,
+    "Generation": 2,
+    "EnableSecureBoot": true,
+    "AdditionalDisks": [
+      {
+        "SizeGB": 0,
+        "Letter": "D",
+        "Label": "Data"
+      }
+    ]
+  },
+  "NetworkConfiguration": {
+    "VirtualSwitch": "Default Switch",
+    "DynamicIP": true,
+    "StaticIPConfiguration": {
+      "IPAddress": "",
+      "SubnetMask": "255.255.255.0",
+      "DefaultGateway": "",
+      "DNSServers": [
+        "",
+        ""
+      ]
+    }
+  },
+  "OSConfiguration": {
+    "OSVersion": "Windows Server 2022 Standard",
+    "ProductKey": "",
+    "TimeZone": 85,
+    "AdminPassword": "P@ssw0rd",
+    "ComputerName": "",
+    "Organization": "Custom Organization",
+    "Owner": "Administrator"
+  },
+  "AdditionalConfiguration": {
+    "AutoStartVM": false,
+    "UseUnattendXML": true,
+    "EnableRDP": true,
+    "EnablePSRemoting": true
+  },
+  "Metadata": {
+    "CreatedDate": "2023-03-29T00:00:00",
+    "LastModifiedDate": "2023-03-29T00:00:00",
+    "Author": "System",
+    "Tags": [
+      "Custom",
+      "Basic"
+    ]
+  }
+} 

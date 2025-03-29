@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+    <settings pass="windowsPE">
+        <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <SetupUILanguage>
+                <UILanguage>en-US</UILanguage>
+            </SetupUILanguage>
+            <InputLocale>en-US</InputLocale>
+            <SystemLocale>en-US</SystemLocale>
+            <UILanguage>en-US</UILanguage>
+            <UILanguageFallback>en-US</UILanguageFallback>
+            <UserLocale>en-US</UserLocale>
+        </component>
+        <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DiskConfiguration>
+                <Disk wcm:action="add">
+                    <CreatePartitions>
+                        <CreatePartition wcm:action="add">
+                            <Order>1</Order>
+                            <Type>Primary</Type>
+                            <Size>350</Size>
+                        </CreatePartition>
+                        <CreatePartition wcm:action="add">
+                            <Order>2</Order>
+                            <Type>Primary</Type>
+                            <Extend>true</Extend>
+                        </CreatePartition>
+                    </CreatePartitions>
+                    <ModifyPartitions>
+                        <ModifyPartition wcm:action="add">
+                            <Order>1</Order>
+                            <PartitionID>1</PartitionID>
+                            <Label>System</Label>
+                            <Format>NTFS</Format>
+                            <Active>true</Active>
+                        </ModifyPartition>
+                        <ModifyPartition wcm:action="add">
+                            <Order>2</Order>
+                            <PartitionID>2</PartitionID>
+                            <Label>Windows</Label>
+                            <Letter>C</Letter>
+                            <Format>NTFS</Format>
+                        </ModifyPartition>
+                    </ModifyPartitions>
+                    <DiskID>0</DiskID>
+                    <WillWipeDisk>true</WillWipeDisk>
+                </Disk>
+            </DiskConfiguration>
+            <ImageInstall>
+                <OSImage>
+                    <InstallTo>
+                        <DiskID>0</DiskID>
+                        <PartitionID>2</PartitionID>
+                    </InstallTo>
+                    <InstallToAvailablePartition>false</InstallToAvailablePartition>
+                    <WillShowUI>OnError</WillShowUI>
+                    <InstallFrom>
+                        <MetaData wcm:action="add">
+                            <Key>/IMAGE/NAME</Key>
+                            <Value>Windows Server 2019 SERVERSTANDARD</Value>
+                        </MetaData>
+                    </InstallFrom>
+                </OSImage>
+            </ImageInstall>
+            <UserData>
+                <AcceptEula>true</AcceptEula>
+                <ProductKey>
+                    <Key>PRODUCT_KEY_PLACEHOLDER</Key>
+                    <WillShowUI>OnError</WillShowUI>
+                </ProductKey>
+            </UserData>
+        </component>
+    </settings>
+    <settings pass="specialize">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <ComputerName>%COMPUTERNAME%</ComputerName>
+            <TimeZone>UTC</TimeZone>
+        </component>
+        <component name="Microsoft-Windows-ServerManager-SvrMgrNc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DoNotOpenServerManagerAtLogon>true</DoNotOpenServerManagerAtLogon>
+        </component>
+        <component name="Microsoft-Windows-IE-ESC" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <IEHardenAdmin>false</IEHardenAdmin>
+            <IEHardenUser>false</IEHardenUser>
+        </component>
+        <component name="Networking-MPSSVC-Svc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <FirewallGroups>
+                <FirewallGroup wcm:action="add" wcm:keyValue="RemoteDesktop">
+                    <Active>true</Active>
+                    <Group>Remote Desktop</Group>
+                    <Profile>all</Profile>
+                </FirewallGroup>
+                <FirewallGroup wcm:action="add" wcm:keyValue="CoreNetworking">
+                    <Active>true</Active>
+                    <Group>Core Networking</Group>
+                    <Profile>all</Profile>
+                </FirewallGroup>
+                <FirewallGroup wcm:action="add" wcm:keyValue="FileAndPrinter">
+                    <Active>true</Active>
+                    <Group>File and Printer Sharing</Group>
+                    <Profile>all</Profile>
+                </FirewallGroup>
+            </FirewallGroups>
+        </component>
+        <component name="Microsoft-Windows-TerminalServices-LocalSessionManager" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <fDenyTSConnections>false</fDenyTSConnections>
+        </component>
+        <component name="Microsoft-Windows-TCPIP" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <Interfaces>
+                <Interface wcm:action="add">
+                    <Ipv4Settings>
+                        <DhcpEnabled>%DHCP_ENABLED%</DhcpEnabled>
+                    </Ipv4Settings>
+                    <Identifier>%NETWORK_INTERFACE%</Identifier>
+                    <UnicastIpAddresses>
+                        <IpAddress wcm:action="add" wcm:keyValue="1">%IP_ADDRESS%</IpAddress>
+                    </UnicastIpAddresses>
+                    <Routes>
+                        <Route wcm:action="add">
+                            <Identifier>0</Identifier>
+                            <Prefix>0.0.0.0/0</Prefix>
+                            <NextHopAddress>%DEFAULT_GATEWAY%</NextHopAddress>
+                        </Route>
+                    </Routes>
+                </Interface>
+            </Interfaces>
+        </component>
+        <component name="Microsoft-Windows-DNS-Client" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <Interfaces>
+                <Interface wcm:action="add">
+                    <Identifier>%NETWORK_INTERFACE%</Identifier>
+                    <DNSServerSearchOrder>
+                        <IpAddress wcm:action="add" wcm:keyValue="1">%PRIMARY_DNS%</IpAddress>
+                        <IpAddress wcm:action="add" wcm:keyValue="2">%SECONDARY_DNS%</IpAddress>
+                    </DNSServerSearchOrder>
+                    <EnableAdapterDomainNameRegistration>true</EnableAdapterDomainNameRegistration>
+                    <DisableDynamicUpdate>false</DisableDynamicUpdate>
+                </Interface>
+            </Interfaces>
+        </component>
+    </settings>
+    <settings pass="oobeSystem">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <UserAccounts>
+                <AdministratorPassword>
+                    <Value>%ADMIN_PASSWORD%</Value>
+                    <PlainText>true</PlainText>
+                </AdministratorPassword>
+            </UserAccounts>
+            <OOBE>
+                <HideEULAPage>true</HideEULAPage>
+                <HideLocalAccountScreen>true</HideLocalAccountScreen>
+                <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+                <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+                <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+                <NetworkLocation>Work</NetworkLocation>
+                <ProtectYourPC>1</ProtectYourPC>
+                <SkipMachineOOBE>true</SkipMachineOOBE>
+                <SkipUserOOBE>true</SkipUserOOBE>
+            </OOBE>
+            <AutoLogon>
+                <Password>
+                    <Value>%ADMIN_PASSWORD%</Value>
+                    <PlainText>true</PlainText>
+                </Password>
+                <Enabled>true</Enabled>
+                <LogonCount>1</LogonCount>
+                <Username>Administrator</Username>
+            </AutoLogon>
+            <FirstLogonCommands>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "Enable-PSRemoting -Force"</CommandLine>
+                    <Description>Enable PowerShell Remoting</Description>
+                    <Order>1</Order>
+                    <RequiresUserInput>false</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "Set-ExecutionPolicy Unrestricted -Force"</CommandLine>
+                    <Description>Set Execution Policy</Description>
+                    <Order>2</Order>
+                    <RequiresUserInput>false</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "New-Item -Path C:\Setup -ItemType Directory -ErrorAction SilentlyContinue"</CommandLine>
+                    <Description>Create Setup Directory</Description>
+                    <Order>3</Order>
+                    <RequiresUserInput>false</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c wmic computersystem where name="%COMPUTERNAME%" call rename name="FS01"</CommandLine>
+                    <Description>Rename Computer</Description>
+                    <Order>4</Order>
+                    <RequiresUserInput>false</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server'-name 'fDenyTSConnections' -Value 0 -PropertyType DWord -Force"</CommandLine>
+                    <Description>Enable RDP</Description>
+                    <Order>5</Order>
+                    <RequiresUserInput>false</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "Enable-NetFirewallRule -DisplayGroup 'Remote Desktop'"</CommandLine>
+                    <Description>Enable RDP Firewall Rules</Description>
+                    <Order>6</Order>
+                    <RequiresUserInput>false</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "Enable-NetFirewallRule -DisplayGroup 'File and Printer Sharing'"</CommandLine>
+                    <Description>Enable File Sharing Firewall Rules</Description>
+                    <Order>7</Order>
+                    <RequiresUserInput>false</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "New-Item -Path 'C:\Shares' -ItemType Directory -Force"</CommandLine>
+                    <Description>Create Default Shares Directory</Description>
+                    <Order>8</Order>
+                    <RequiresUserInput>false</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "Set-SmbServerConfiguration -EnableSMB2Protocol $true -Force"</CommandLine>
+                    <Description>Enable SMB 2.0</Description>
+                    <Order>9</Order>
+                    <RequiresUserInput>false</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c shutdown /r /t 5</CommandLine>
+                    <Description>Restart Computer</Description>
+                    <Order>10</Order>
+                    <RequiresUserInput>false</RequiresUserInput>
+                </SynchronousCommand>
+            </FirstLogonCommands>
+        </component>
+    </settings>
+</unattend> 

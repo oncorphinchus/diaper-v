@@ -1,0 +1,52 @@
+{
+  "TemplateName": "Minimal Custom VM",
+  "ServerRole": "CustomVM",
+  "Description": "A minimal resource custom virtual machine for development/testing",
+  "HardwareConfiguration": {
+    "ProcessorCount": 1,
+    "MemoryGB": 2,
+    "StorageGB": 60,
+    "Generation": 2,
+    "EnableSecureBoot": true,
+    "AdditionalDisks": []
+  },
+  "NetworkConfiguration": {
+    "VirtualSwitch": "Default Switch",
+    "DynamicIP": true,
+    "StaticIPConfiguration": {
+      "IPAddress": "",
+      "SubnetMask": "255.255.255.0",
+      "DefaultGateway": "",
+      "DNSServers": [
+        "",
+        ""
+      ]
+    }
+  },
+  "OSConfiguration": {
+    "OSVersion": "Windows Server 2022 Standard",
+    "ProductKey": "",
+    "TimeZone": 85,
+    "AdminPassword": "P@ssw0rd",
+    "ComputerName": "DEV-VM",
+    "Organization": "Development Team",
+    "Owner": "Developer"
+  },
+  "AdditionalConfiguration": {
+    "AutoStartVM": false,
+    "UseUnattendXML": true,
+    "EnableRDP": true,
+    "EnablePSRemoting": true
+  },
+  "Metadata": {
+    "CreatedDate": "2023-03-29T00:00:00",
+    "LastModifiedDate": "2023-03-29T00:00:00",
+    "Author": "System",
+    "Tags": [
+      "Custom",
+      "Minimal",
+      "Development",
+      "Testing"
+    ]
+  }
+} 

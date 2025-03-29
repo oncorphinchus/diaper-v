@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+    <servicing>
+        <package action="configure">
+            <assemblyIdentity name="Microsoft-Windows-Foundation-Package" version="10.0.14393.0" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="" />
+            <selection name="IIS-WebServerRole" state="false" />
+            <selection name="IIS-WebServer" state="false" />
+            <selection name="IIS-CommonHttpFeatures" state="false" />
+            <selection name="IIS-HttpErrors" state="false" />
+            <selection name="IIS-HttpRedirect" state="false" />
+            <selection name="IIS-ApplicationDevelopment" state="false" />
+            <selection name="IIS-NetFxExtensibility" state="false" />
+            <selection name="IIS-NetFxExtensibility45" state="false" />
+            <selection name="IIS-HealthAndDiagnostics" state="false" />
+            <selection name="IIS-HttpLogging" state="false" />
+            <selection name="IIS-LoggingLibraries" state="false" />
+            <selection name="IIS-RequestMonitor" state="false" />
+            <selection name="IIS-HttpTracing" state="false" />
+            <selection name="IIS-Security" state="false" />
+            <selection name="IIS-URLAuthorization" state="false" />
+            <selection name="IIS-RequestFiltering" state="false" />
+            <selection name="IIS-IPSecurity" state="false" />
+            <selection name="IIS-Performance" state="false" />
+            <selection name="IIS-HttpCompressionDynamic" state="false" />
+            <selection name="IIS-WebServerManagementTools" state="false" />
+            <selection name="IIS-ManagementScriptingTools" state="false" />
+            <selection name="IIS-IIS6ManagementCompatibility" state="false" />
+            <selection name="IIS-Metabase" state="false" />
+            <selection name="WAS-WindowsActivationService" state="false" />
+            <selection name="WAS-ProcessModel" state="false" />
+            <selection name="WAS-NetFxEnvironment" state="false" />
+            <selection name="WAS-ConfigurationAPI" state="false" />
+            <selection name="WCF-HTTP-Activation" state="false" />
+            <selection name="WCF-NonHTTP-Activation" state="false" />
+            <selection name="IIS-CertProvider" state="false" />
+            <selection name="IIS-WindowsAuthentication" state="false" />
+            <selection name="IIS-DigestAuthentication" state="false" />
+            <selection name="IIS-ClientCertificateMappingAuthentication" state="false" />
+            <selection name="IIS-IISCertificateMappingAuthentication" state="false" />
+            <selection name="IIS-ODBCLogging" state="false" />
+            <selection name="IIS-StaticContent" state="false" />
+            <selection name="IIS-DefaultDocument" state="false" />
+            <selection name="IIS-DirectoryBrowsing" state="false" />
+            <selection name="IIS-WebDAV" state="false" />
+            <selection name="IIS-WebSockets" state="false" />
+            <selection name="IIS-ApplicationInit" state="false" />
+            <selection name="IIS-ASPNET" state="false" />
+            <selection name="IIS-ASPNET45" state="false" />
+            <selection name="IIS-ASP" state="false" />
+            <selection name="IIS-CGI" state="false" />
+            <selection name="IIS-ISAPIExtensions" state="false" />
+            <selection name="IIS-ISAPIFilter" state="false" />
+            <selection name="IIS-ServerSideIncludes" state="false" />
+            <selection name="IIS-CustomLogging" state="false" />
+            <selection name="IIS-BasicAuthentication" state="false" />
+            <selection name="IIS-HttpCompressionStatic" state="false" />
+            <selection name="IIS-ManagementConsole" state="false" />
+            <selection name="IIS-ManagementService" state="false" />
+            <selection name="IIS-WMICompatibility" state="false" />
+            <selection name="IIS-LegacyScripts" state="false" />
+            <selection name="IIS-LegacySnapIn" state="false" />
+            <selection name="IIS-FTPServer" state="false" />
+            <selection name="IIS-FTPSvc" state="false" />
+            <selection name="IIS-FTPExtensibility" state="false" />
+            <selection name="MSMQ-Container" state="false" />
+            <selection name="MSMQ-Server" state="false" />
+            <selection name="MSMQ-Triggers" state="false" />
+            <selection name="MSMQ-ADIntegration" state="false" />
+            <selection name="MSMQ-HTTP" state="false" />
+            <selection name="MSMQ-Multicast" state="false" />
+            <selection name="MSMQ-DCOMProxy" state="false" />
+            <selection name="WCF-HTTP-Activation45" state="false" />
+            <selection name="WCF-TCP-Activation45" state="false" />
+            <selection name="WCF-Pipe-Activation45" state="false" />
+            <selection name="WCF-MSMQ-Activation45" state="false" />
+            <selection name="WCF-TCP-PortSharing45" state="false" />
+            <selection name="IIS-CertProviderV2" state="false" />
+            <selection name="NetFx4-AdvSrvs" state="true" />
+            <selection name="NetFx4Extended-ASPNET45" state="true" />
+        </package>
+    </servicing>
+    <settings pass="generalize">
+        <component name="Microsoft-Windows-Security-SPP" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <SkipRearm>1</SkipRearm>
+        </component>
+    </settings>
+    <settings pass="specialize">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <ComputerName>%%COMPUTERNAME%%</ComputerName>
+            <TimeZone>%%TIMEZONE%%</TimeZone>
+        </component>
+        <component name="Microsoft-Windows-TerminalServices-LocalSessionManager" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <fDenyTSConnections>false</fDenyTSConnections>
+        </component>
+        <component name="Networking-MPSSVC-Svc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <FirewallGroups>
+                <FirewallGroup wcm:action="add" wcm:keyValue="RemoteDesktop">
+                    <Active>true</Active>
+                    <Group>Remote Desktop</Group>
+                    <Profile>all</Profile>
+                </FirewallGroup>
+                <FirewallGroup wcm:action="add" wcm:keyValue="SQLServer">
+                    <Active>true</Active>
+                    <Group>SQL Server</Group>
+                    <Profile>all</Profile>
+                </FirewallGroup>
+            </FirewallGroups>
+        </component>
+        <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <InputLocale>%%INPUTLOCALE%%</InputLocale>
+            <SystemLocale>%%SYSTEMLOCALE%%</SystemLocale>
+            <UILanguage>%%UILANGUAGE%%</UILanguage>
+            <UserLocale>%%USERLOCALE%%</UserLocale>
+        </component>
+        <component name="Microsoft-Windows-IE-ESC" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <IEHardenAdmin>false</IEHardenAdmin>
+            <IEHardenUser>false</IEHardenUser>
+        </component>
+        <component name="Microsoft-Windows-ServerManager-SvrMgrNc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <DoNotOpenServerManagerAtLogon>true</DoNotOpenServerManagerAtLogon>
+        </component>
+    </settings>
+    <settings pass="oobeSystem">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <UserAccounts>
+                <AdministratorPassword>
+                    <Value>%%ADMINPASSWORD%%</Value>
+                    <PlainText>true</PlainText>
+                </AdministratorPassword>
+            </UserAccounts>
+            <OOBE>
+                <HideEULAPage>true</HideEULAPage>
+                <HideLocalAccountScreen>true</HideLocalAccountScreen>
+                <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+                <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+                <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+                <ProtectYourPC>3</ProtectYourPC>
+            </OOBE>
+            <AutoLogon>
+                <Password>
+                    <Value>%%ADMINPASSWORD%%</Value>
+                    <PlainText>true</PlainText>
+                </Password>
+                <Enabled>true</Enabled>
+                <LogonCount>1</LogonCount>
+                <Username>Administrator</Username>
+            </AutoLogon>
+            <FirstLogonCommands>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "Set-ExecutionPolicy Unrestricted -Force"</CommandLine>
+                    <Description>Set Execution Policy 64 Bit</Description>
+                    <Order>1</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "Enable-PSRemoting -SkipNetworkProfileCheck -Force"</CommandLine>
+                    <Description>Enable PS Remoting</Description>
+                    <Order>2</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "Install-WindowsFeature -Name NET-Framework-45-Core, RSAT-AD-PowerShell, RSAT-AD-AdminCenter -IncludeManagementTools"</CommandLine>
+                    <Description>Install Pre-requisites for SQL Server</Description>
+                    <Order>3</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0; Enable-NetFirewallRule -DisplayGroup 'Remote Desktop'"</CommandLine>
+                    <Description>Enable Remote Desktop</Description>
+                    <Order>4</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "New-NetFirewallRule -DisplayName 'SQL Server' -Direction Inbound -Protocol TCP -LocalPort 1433 -Action Allow"</CommandLine>
+                    <Description>Create Firewall Rule for SQL Server</Description>
+                    <Order>5</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "New-NetFirewallRule -DisplayName 'SQL Browser' -Direction Inbound -Protocol UDP -LocalPort 1434 -Action Allow"</CommandLine>
+                    <Description>Create Firewall Rule for SQL Browser</Description>
+                    <Order>6</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>wmic computersystem set AutomaticManagedPagefile=False</CommandLine>
+                    <Description>Disable Automatic Managed Pagefile</Description>
+                    <Order>7</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>wmic pagefileset create name="C:\pagefile.sys"</CommandLine>
+                    <Description>Create Pagefile</Description>
+                    <Order>8</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>wmic pagefileset set InitialSize=2048,MaximumSize=4096</CommandLine>
+                    <Description>Configure Pagefile</Description>
+                    <Order>9</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "New-Item -Path 'C:\SQL_Server_Setup' -ItemType Directory -Force | Out-Null"</CommandLine>
+                    <Description>Create SQL Server setup directory</Description>
+                    <Order>10</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "New-Item -Path 'C:\SQL_Data' -ItemType Directory -Force | Out-Null"</CommandLine>
+                    <Description>Create SQL Server data directory</Description>
+                    <Order>11</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "New-Item -Path 'C:\SQL_Logs' -ItemType Directory -Force | Out-Null"</CommandLine>
+                    <Description>Create SQL Server logs directory</Description>
+                    <Order>12</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <CommandLine>cmd.exe /c powershell -Command "New-Item -Path 'C:\SQL_Backup' -ItemType Directory -Force | Out-Null"</CommandLine>
+                    <Description>Create SQL Server backup directory</Description>
+                    <Order>13</Order>
+                    <RequiresUserInput>true</RequiresUserInput>
+                </SynchronousCommand>
+            </FirstLogonCommands>
+        </component>
+    </settings>
+</unattend> 

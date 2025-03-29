@@ -1,0 +1,17 @@
+<Application x:Class="HyperVCreator.App.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:HyperVCreator.App"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Base styles -->
+                <ResourceDictionary Source="Themes/BaseTheme.xaml"/>
+                
+                <!-- Theme to use (will be replaced dynamically) -->
+                <ResourceDictionary Source="Themes/ClassicTheme/ClassicTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
