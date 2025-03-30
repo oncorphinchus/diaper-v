@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using HyperVCreator.Core.Models;
 using HyperVCreator.Core.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,28 +12,140 @@ namespace HyperVCreator.Core.Tests
     [TestClass]
     public class TemplateServiceTests
     {
-        private string _testTemplateDirectory;
+        private string _testTemplatePath;
         private TemplateService _templateService;
         
         [TestInitialize]
-        public void Initialize()
+        public void Setup()
         {
-            // Create a temporary directory for templates
-            _testTemplateDirectory = Path.Combine(Path.GetTempPath(), "HyperVCreatorTests", Guid.NewGuid().ToString());
-            Directory.CreateDirectory(_testTemplateDirectory);
+            // Create a temporary directory for test templates
+            _testTemplatePath = Path.Combine(Path.GetTempPath(), "HyperVCreatorTests", "Templates", Guid.NewGuid().ToString());
+            Directory.CreateDirectory(_testTemplatePath);
             
-            // Initialize the service with the test directory
-            _templateService = new TemplateService(_testTemplateDirectory);
+            // Create template service with test path
+            _templateService = new TemplateService(_testTemplatePath);
         }
         
         [TestCleanup]
         public void Cleanup()
         {
-            // Clean up the test directory
-            if (Directory.Exists(_testTemplateDirectory))
+            // Clean up test directory
+            if (Directory.Exists(_testTemplatePath))
             {
-                Directory.Delete(_testTemplateDirectory, true);
+                Directory.Delete(_testTemplatePath, true);
             }
+        }
+        
+        [TestMethod]
+        public void GetAllTemplates_ReturnsDefaultTemplates()
+        {
+            // Act
+            var templates = _templateService.GetAllTemplates();
+            
+            // Assert
+            Assert.IsNotNull(templates);
+            Assert.IsTrue(templates.Count > 0);
+            Assert.IsTrue(templates.Any(t => t.ServerRole == "CustomVM"));
+            Assert.IsTrue(templates.Any(t => t.ServerRole == "DomainController"));
+        }
+        
+        [TestMethod]
+        public void GetTemplateByName_ReturnsCorrectTemplate()
+        {
+            // Arrange
+            string templateName = "Default Custom VM";
+            
+            // Act
+            var template = _templateService.GetTemplateByName(templateName);
+            
+            // Assert
+            Assert.IsNotNull(template);
+            Assert.AreEqual(templateName, template.TemplateName);
+            Assert.AreEqual("CustomVM", template.ServerRole);
+        }
+        
+        [TestMethod]
+        public void GetTemplateByName_ReturnsNull_WhenTemplateDoesNotExist()
+        {
+            // Act
+            var template = _templateService.GetTemplateByName("Non-existent template");
+            
+            // Assert
+            Assert.IsNull(template);
+        }
+        
+        [TestMethod]
+        public void SaveTemplate_SavesTemplateSuccessfully()
+        {
+            // Arrange
+            var template = new VMTemplate
+            {
+                TemplateName = "Test Template",
+                ServerRole = "TestRole",
+                Description = "Test description"
+            };
+            
+            // Act
+            bool result = _templateService.SaveTemplate(template);
+            
+            // Assert
+            Assert.IsTrue(result);
+            
+            // Verify template was saved
+            var savedTemplate = _templateService.GetTemplateByName("Test Template");
+            Assert.IsNotNull(savedTemplate);
+            Assert.AreEqual("Test Template", savedTemplate.TemplateName);
+            Assert.AreEqual("TestRole", savedTemplate.ServerRole);
+            Assert.AreEqual("Test description", savedTemplate.Description);
+        }
+        
+        [TestMethod]
+        public void SaveTemplate_ReturnsFalse_WhenTemplateNameIsNull()
+        {
+            // Arrange
+            var template = new VMTemplate
+            {
+                TemplateName = null,
+                ServerRole = "TestRole"
+            };
+            
+            // Act
+            bool result = _templateService.SaveTemplate(template);
+            
+            // Assert
+            Assert.IsFalse(result);
+        }
+        
+        [TestMethod]
+        public void DeleteTemplate_DeletesTemplateSuccessfully()
+        {
+            // Arrange
+            var template = new VMTemplate
+            {
+                TemplateName = "Template To Delete",
+                ServerRole = "TestRole"
+            };
+            _templateService.SaveTemplate(template);
+            
+            // Act
+            bool result = _templateService.DeleteTemplate("Template To Delete");
+            
+            // Assert
+            Assert.IsTrue(result);
+            
+            // Verify template was deleted
+            var deletedTemplate = _templateService.GetTemplateByName("Template To Delete");
+            Assert.IsNull(deletedTemplate);
+        }
+        
+        [TestMethod]
+        public void DeleteTemplate_ReturnsFalse_WhenTemplateDoesNotExist()
+        {
+            // Act
+            bool result = _templateService.DeleteTemplate("Non-existent template");
+            
+            // Assert
+            Assert.IsFalse(result);
         }
         
         [TestMethod]
@@ -95,24 +209,6 @@ namespace HyperVCreator.Core.Tests
             Assert.AreEqual(2, customVMTemplates.Count);
             Assert.AreEqual(1, fileServerTemplates.Count);
             Assert.AreEqual(0, nonExistingRoleTemplates.Count);
-        }
-        
-        [TestMethod]
-        public async Task DeleteTemplate_ShouldRemoveFile()
-        {
-            // Arrange
-            var template = CreateTestTemplate();
-            var fileName = "test-template.json";
-            await _templateService.SaveTemplateAsync(template, fileName);
-            
-            // Act
-            _templateService.DeleteTemplate(fileName);
-            
-            // Assert
-            Assert.IsFalse(File.Exists(Path.Combine(_testTemplateDirectory, fileName)));
-            
-            // Act & Assert - Trying to delete non-existing file should throw
-            Assert.ThrowsException<FileNotFoundException>(() => _templateService.DeleteTemplate(fileName));
         }
         
         [TestMethod]

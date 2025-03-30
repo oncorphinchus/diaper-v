@@ -1,0 +1,287 @@
+<UserControl x:Class="HyperVCreator.App.Views.TemplateEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HyperVCreator.App.Views"
+             xmlns:vm="clr-namespace:HyperVCreator.App.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=vm:TemplateEditorViewModel}">
+    <Grid Margin="10">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Header -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                    <TextBlock Text="{Binding IsNew, Converter={StaticResource BoolToStringConverter}, ConverterParameter='Create New Template;Edit Template'}" 
+                               FontSize="24" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" 
+                               Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                </StackPanel>
+                
+                <!-- Content -->
+                <TabControl Grid.Row="1" Margin="0,0,0,10">
+                    <!-- Basic Info -->
+                    <TabItem Header="Basic Info">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Template Name:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding TemplateName, UpdateSourceTrigger=PropertyChanged}" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Server Role:" VerticalAlignment="Center" Margin="0,5"/>
+                            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding AvailableServerRoles}" 
+                                     SelectedItem="{Binding ServerRole}" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Description:" VerticalAlignment="Top" Margin="0,5"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Description}" 
+                                    AcceptsReturn="True" TextWrapping="Wrap" Height="80" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Tags:" VerticalAlignment="Top" Margin="0,5"/>
+                            <Grid Grid.Row="3" Grid.Column="1" Margin="0,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0" Text="{Binding NewTagText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,0"/>
+                                    <Button Grid.Column="1" Content="Add" Command="{Binding AddTagCommand}" Padding="10,2"/>
+                                </Grid>
+                                <ListBox Grid.Row="1" ItemsSource="{Binding Tags}" SelectedIndex="{Binding SelectedTagIndex}" 
+                                         Height="80" Margin="0,5,0,0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Remove" Command="{Binding RemoveTagCommand}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
+                                </ListBox>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    
+                    <!-- Hardware Configuration -->
+                    <TabItem Header="Hardware">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Processor Cores:" VerticalAlignment="Center" Margin="0,5"/>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
+                                <Slider Minimum="1" Maximum="16" Value="{Binding ProcessorCount}" Width="200" 
+                                       TickFrequency="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight"/>
+                                <TextBlock Text="{Binding ProcessorCount}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Memory (GB):" VerticalAlignment="Center" Margin="0,5"/>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
+                                <Slider Minimum="1" Maximum="64" Value="{Binding MemoryGB}" Width="200" 
+                                       TickFrequency="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight"/>
+                                <TextBlock Text="{Binding MemoryGB}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Storage (GB):" VerticalAlignment="Center" Margin="0,5"/>
+                            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
+                                <Slider Minimum="20" Maximum="2000" Value="{Binding StorageGB}" Width="200" 
+                                       TickFrequency="10" IsSnapToTickEnabled="True" TickPlacement="BottomRight"/>
+                                <TextBlock Text="{Binding StorageGB}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="VM Generation:" VerticalAlignment="Center" Margin="0,5"/>
+                            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
+                                <RadioButton Content="Generation 1" IsChecked="{Binding Generation, Converter={StaticResource EqualityConverter}, ConverterParameter=1}" Margin="0,0,10,0"/>
+                                <RadioButton Content="Generation 2" IsChecked="{Binding Generation, Converter={StaticResource EqualityConverter}, ConverterParameter=2}"/>
+                            </StackPanel>
+                            
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Secure Boot:" VerticalAlignment="Center" Margin="0,5"/>
+                            <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding EnableSecureBoot}" 
+                                     Content="Enable Secure Boot" Margin="0,5"
+                                     IsEnabled="{Binding Generation, Converter={StaticResource EqualityConverter}, ConverterParameter=2}"/>
+                            
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Additional Disks:" VerticalAlignment="Top" Margin="0,5"/>
+                            <Grid Grid.Row="5" Grid.Column="1" Margin="0,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,5">
+                                    <Button Content="Add Disk" Command="{Binding AddDiskCommand}" Padding="10,2" Margin="0,0,10,0"/>
+                                    <Button Content="Remove Disk" Command="{Binding RemoveDiskCommand}" Padding="10,2"/>
+                                </StackPanel>
+                                <DataGrid Grid.Row="1" ItemsSource="{Binding AdditionalDisks}" 
+                                         AutoGenerateColumns="False" IsReadOnly="False"
+                                         SelectedIndex="{Binding SelectedDiskIndex}" Height="120">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Size (GB)" Binding="{Binding SizeGB}" Width="*"/>
+                                        <DataGridTextColumn Header="Drive Letter" Binding="{Binding Letter}" Width="100"/>
+                                        <DataGridTextColumn Header="Label" Binding="{Binding Label}" Width="150"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    
+                    <!-- Network Configuration -->
+                    <TabItem Header="Network">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Virtual Switch:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding VirtualSwitch}" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="IP Configuration:" VerticalAlignment="Center" Margin="0,5"/>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
+                                <RadioButton Content="Dynamic IP (DHCP)" IsChecked="{Binding DynamicIP}" Margin="0,0,10,0"/>
+                                <RadioButton Content="Static IP" IsChecked="{Binding DynamicIP, Converter={StaticResource InverseBooleanConverter}}"/>
+                            </StackPanel>
+                            
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="IP Address:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding IPAddress}" 
+                                    IsEnabled="{Binding DynamicIP, Converter={StaticResource InverseBooleanConverter}}" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Subnet Mask:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SubnetMask}" 
+                                    IsEnabled="{Binding DynamicIP, Converter={StaticResource InverseBooleanConverter}}" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Default Gateway:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding DefaultGateway}" 
+                                    IsEnabled="{Binding DynamicIP, Converter={StaticResource InverseBooleanConverter}}" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="DNS Servers:" VerticalAlignment="Top" Margin="0,5"/>
+                            <ListBox Grid.Row="5" Grid.Column="1" ItemsSource="{Binding DNSServers}" 
+                                    IsEnabled="{Binding DynamicIP, Converter={StaticResource InverseBooleanConverter}}"
+                                    Height="80" Margin="0,5"/>
+                        </Grid>
+                    </TabItem>
+                    
+                    <!-- OS Configuration -->
+                    <TabItem Header="Operating System">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="OS Version:" VerticalAlignment="Center" Margin="0,5"/>
+                            <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding AvailableOSVersions}" 
+                                     SelectedItem="{Binding OSVersion}" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Product Key:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ProductKey}" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Admin Password:" VerticalAlignment="Center" Margin="0,5"/>
+                            <PasswordBox Grid.Row="2" Grid.Column="1" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Computer Name:" VerticalAlignment="Center" Margin="0,5"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ComputerName}" Margin="0,5"/>
+                        </Grid>
+                    </TabItem>
+                    
+                    <!-- Additional Options -->
+                    <TabItem Header="Additional Options">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Auto Start VM:" VerticalAlignment="Center" Margin="0,5"/>
+                            <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding AutoStartVM}" 
+                                     Content="Start VM automatically after creation" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Unattended Install:" VerticalAlignment="Center" Margin="0,5"/>
+                            <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding UseUnattendXML}" 
+                                     Content="Use unattend.xml for automated OS installation" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Remote Desktop:" VerticalAlignment="Center" Margin="0,5"/>
+                            <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding EnableRDP}" 
+                                     Content="Enable Remote Desktop" Margin="0,5"/>
+                            
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="PowerShell Remoting:" VerticalAlignment="Center" Margin="0,5"/>
+                            <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding EnablePSRemoting}" 
+                                     Content="Enable PowerShell Remoting" Margin="0,5"/>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                
+                <!-- Buttons -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" 
+                            Padding="15,5" Margin="0,0,10,0"/>
+                    <Button Content="Save" Command="{Binding SaveCommand}" 
+                            Padding="15,5" IsEnabled="{Binding CanSave}"/>
+                </StackPanel>
+                
+                <!-- Loading Overlay -->
+                <Grid Grid.Row="0" Grid.RowSpan="3" Background="#80000000" 
+                      Visibility="{Binding IsSaving, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Saving template..." Foreground="White" FontSize="16" HorizontalAlignment="Center"/>
+                        <ProgressBar IsIndeterminate="True" Width="200" Height="10" Margin="0,10,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl> 

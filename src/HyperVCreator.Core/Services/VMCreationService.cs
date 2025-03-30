@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using HyperVCreator.Core.PowerShell;
+using HyperVCreator.Core.Models;
 
 namespace HyperVCreator.Core.Services
 {
@@ -12,7 +13,7 @@ namespace HyperVCreator.Core.Services
     /// </summary>
     public class VMCreationService : IDisposable
     {
-        private readonly PowerShellService _powerShellService;
+        private readonly PowerShell.PowerShellService _powerShellService;
         private readonly TemplateService _templateService;
         private readonly TemplateConverter _templateConverter;
         private readonly string _scriptPath;
@@ -25,7 +26,7 @@ namespace HyperVCreator.Core.Services
         public VMCreationService(string scriptPath = null, string templatePath = null)
         {
             _scriptPath = scriptPath ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Scripts");
-            _powerShellService = new PowerShellService(1, 5, _scriptPath);
+            _powerShellService = new PowerShell.PowerShellService(1, 5, _scriptPath);
             _templateService = new TemplateService(templatePath);
             _templateConverter = new TemplateConverter();
         }

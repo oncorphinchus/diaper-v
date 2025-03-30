@@ -2,10 +2,15 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>warnings</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <StartupObject>HyperVCreator.App.App</StartupObject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);TESTING</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,12 +18,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\" />
-    <Folder Include="ViewModels\" />
-    <Folder Include="Models\" />
     <Folder Include="Controls\" />
-    <Folder Include="Themes\" />
+    <Folder Include="Models\" />
     <Folder Include="Resources\" />
   </ItemGroup>
+
+  <!-- Define additional entry points -->
+  <ItemGroup>
+    <Compile Update="TestConsole.cs">
+      <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+    </Compile>
+    <Compile Update="TestRunner.cs">
+      <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
+    </Compile>
+  </ItemGroup>
+
+  <!-- Add NoWarn to suppress specific nullable warnings -->
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);CS8612;CS8601;CS8602;CS8604;CS8625;CS8767</NoWarn>
+  </PropertyGroup>
 
 </Project>

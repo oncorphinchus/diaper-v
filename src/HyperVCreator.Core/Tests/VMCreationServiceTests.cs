@@ -5,6 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using HyperVCreator.Core.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using HyperVCreator.Core.Models;
+using System.Linq;
 
 namespace HyperVCreator.Core.Tests
 {

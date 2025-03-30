@@ -1,0 +1,119 @@
+{
+  "templateName": "DHCP Server - Default Template",
+  "description": "Default template for creating a basic DHCP Server VM",
+  "version": "1.0.0",
+  "category": "Server Roles",
+  "serverRole": "DHCPServer",
+  "createdBy": "Hyper-V Creator",
+  "lastModified": "2023-11-25",
+  "vmSettings": {
+    "vmName": "DHCP01",
+    "cpuCores": 2,
+    "memoryGB": 4,
+    "dynamicMemory": true,
+    "virtualSwitch": "Default Switch",
+    "generation": 2,
+    "diskSizeGB": 80,
+    "enableVirtualizationExtensions": false,
+    "enableSecureBoot": true,
+    "installFromIso": true,
+    "isoPath": "C:\\ISOs\\WindowsServer2022.iso"
+  },
+  "operatingSystem": {
+    "osType": "Windows",
+    "osVersion": "Windows Server 2022",
+    "osEdition": "Standard",
+    "installGUI": true,
+    "productKey": "",
+    "timeZone": "UTC",
+    "administratorPassword": ""
+  },
+  "dhcpSettings": {
+    "scopes": [
+      {
+        "name": "Default Scope",
+        "startRange": "192.168.1.100",
+        "endRange": "192.168.1.200",
+        "subnetMask": "255.255.255.0",
+        "description": "Default scope for client computers",
+        "leaseDurationDays": 8,
+        "state": "Active",
+        "excludeRanges": [
+          {
+            "startRange": "192.168.1.150",
+            "endRange": "192.168.1.160"
+          }
+        ],
+        "reservations": [
+          {
+            "name": "PrintServer",
+            "ipAddress": "192.168.1.101",
+            "macAddress": "00-11-22-33-44-55",
+            "description": "Printer Server Reservation"
+          }
+        ],
+        "options": [
+          {
+            "optionId": 3,
+            "name": "Router",
+            "value": "192.168.1.1"
+          },
+          {
+            "optionId": 6,
+            "name": "DNS Servers",
+            "value": "192.168.1.10,192.168.1.11"
+          },
+          {
+            "optionId": 15,
+            "name": "DNS Domain Name",
+            "value": "contoso.local"
+          }
+        ]
+      }
+    ],
+    "dnsUpdateSettings": {
+      "enableDnsUpdates": true,
+      "dynamicUpdates": "Always",
+      "updateForNonDNSClients": true,
+      "disableReverseZoneUpdates": false
+    },
+    "failoverSettings": {
+      "enabled": false,
+      "partnerServer": "",
+      "mode": "LoadBalance",
+      "loadBalancePercent": 50,
+      "serverRole": "Active"
+    }
+  },
+  "networkSettings": {
+    "useDHCP": false,
+    "ipAddress": "192.168.1.50",
+    "subnetMask": "255.255.255.0",
+    "defaultGateway": "192.168.1.1",
+    "preferredDNS": "192.168.1.10"
+  },
+  "advancedOptions": {
+    "installRSAT": true,
+    "joinDomain": true,
+    "domainName": "contoso.local",
+    "domainOU": "OU=DHCPServers,DC=contoso,DC=local",
+    "domainUsername": "",
+    "domainPassword": "",
+    "configureBackup": true,
+    "backupPath": "C:\\DHCPBackup",
+    "backupSchedule": "Daily at 11:00 PM",
+    "configureDHCPLogging": true,
+    "dhcpLogPath": "C:\\DHCPLogs"
+  },
+  "scripts": {
+    "preDeploymentScript": "",
+    "postDeploymentScript": "",
+    "dhcpServerConfigurationScript": ""
+  },
+  "tags": [
+    "DHCP Server",
+    "IP Management",
+    "Windows Server",
+    "Default Template"
+  ]
+} 

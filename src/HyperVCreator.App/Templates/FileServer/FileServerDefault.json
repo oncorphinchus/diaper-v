@@ -1,0 +1,91 @@
+{
+  "templateName": "File Server - Default Template",
+  "description": "Default template for creating a basic File Server VM",
+  "version": "1.0.0",
+  "category": "Server Roles",
+  "serverRole": "FileServer",
+  "createdBy": "Hyper-V Creator",
+  "lastModified": "2023-11-25",
+  "vmSettings": {
+    "vmName": "FS01",
+    "cpuCores": 2,
+    "memoryGB": 4,
+    "dynamicMemory": true,
+    "virtualSwitch": "Default Switch",
+    "generation": 2,
+    "diskSizeGB": 120,
+    "enableVirtualizationExtensions": false,
+    "enableSecureBoot": true,
+    "installFromIso": true,
+    "isoPath": "C:\\ISOs\\WindowsServer2022.iso"
+  },
+  "operatingSystem": {
+    "osType": "Windows",
+    "osVersion": "Windows Server 2022",
+    "osEdition": "Standard",
+    "installGUI": true,
+    "productKey": "",
+    "timeZone": "UTC",
+    "administratorPassword": ""
+  },
+  "fileServerSettings": {
+    "dataDisks": [
+      {
+        "size": 500,
+        "letter": "D",
+        "label": "Data",
+        "fileSystem": "NTFS"
+      }
+    ],
+    "shares": [
+      {
+        "name": "SharedData",
+        "path": "D:\\SharedData",
+        "description": "General shared data folder",
+        "permissions": [
+          {
+            "identity": "Everyone",
+            "accessRights": "Read"
+          },
+          {
+            "identity": "Administrators",
+            "accessRights": "FullControl"
+          }
+        ]
+      }
+    ],
+    "dfsEnabled": false,
+    "quotasEnabled": true,
+    "fileScreensEnabled": false,
+    "dedupEnabled": true
+  },
+  "networkSettings": {
+    "useDHCP": false,
+    "ipAddress": "192.168.1.30",
+    "subnetMask": "255.255.255.0",
+    "defaultGateway": "192.168.1.1",
+    "preferredDNS": "192.168.1.10"
+  },
+  "advancedOptions": {
+    "installRSAT": true,
+    "joinDomain": true,
+    "domainName": "contoso.local",
+    "domainOU": "OU=Servers,DC=contoso,DC=local",
+    "domainUsername": "",
+    "domainPassword": "",
+    "installBackupAgent": false,
+    "enableShadowCopies": true,
+    "shadowCopySchedule": "7:00 AM and 12:00 PM"
+  },
+  "scripts": {
+    "preDeploymentScript": "",
+    "postDeploymentScript": "",
+    "fileServerConfigurationScript": ""
+  },
+  "tags": [
+    "File Server",
+    "Storage",
+    "Windows Server",
+    "Default Template"
+  ]
+} 

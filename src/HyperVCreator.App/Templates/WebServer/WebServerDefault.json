@@ -1,0 +1,117 @@
+{
+  "templateName": "Web Server (IIS) - Default Template",
+  "description": "Default template for creating a basic IIS Web Server VM",
+  "version": "1.0.0",
+  "category": "Server Roles",
+  "serverRole": "WebServer",
+  "createdBy": "Hyper-V Creator",
+  "lastModified": "2023-11-25",
+  "vmSettings": {
+    "vmName": "WEB01",
+    "cpuCores": 2,
+    "memoryGB": 4,
+    "dynamicMemory": true,
+    "virtualSwitch": "Default Switch",
+    "generation": 2,
+    "diskSizeGB": 80,
+    "enableVirtualizationExtensions": false,
+    "enableSecureBoot": true,
+    "installFromIso": true,
+    "isoPath": "C:\\ISOs\\WindowsServer2022.iso"
+  },
+  "operatingSystem": {
+    "osType": "Windows",
+    "osVersion": "Windows Server 2022",
+    "osEdition": "Standard",
+    "installGUI": true,
+    "productKey": "",
+    "timeZone": "UTC",
+    "administratorPassword": ""
+  },
+  "webServerSettings": {
+    "installIISFeatures": [
+      "Web-Server",
+      "Web-Common-Http",
+      "Web-Default-Doc",
+      "Web-Dir-Browsing",
+      "Web-Http-Errors",
+      "Web-Static-Content",
+      "Web-Http-Redirect",
+      "Web-Health",
+      "Web-Http-Logging",
+      "Web-Log-Libraries",
+      "Web-Request-Monitor",
+      "Web-Http-Tracing",
+      "Web-Performance",
+      "Web-Stat-Compression",
+      "Web-Dyn-Compression",
+      "Web-Security",
+      "Web-Filtering",
+      "Web-Basic-Auth",
+      "Web-Windows-Auth",
+      "Web-App-Dev",
+      "Web-Net-Ext45",
+      "Web-Asp-Net45",
+      "Web-ISAPI-Ext",
+      "Web-ISAPI-Filter",
+      "Web-Mgmt-Tools",
+      "Web-Mgmt-Console",
+      "Web-Mgmt-Service"
+    ],
+    "defaultWebsites": [
+      {
+        "name": "Default Web Site",
+        "physicalPath": "C:\\inetpub\\wwwroot",
+        "port": 80,
+        "protocol": "http",
+        "enabled": true
+      }
+    ],
+    "applicationPools": [
+      {
+        "name": "DefaultAppPool",
+        "managedRuntimeVersion": "v4.0",
+        "managedPipelineMode": "Integrated",
+        "identityType": "ApplicationPoolIdentity",
+        "idleTimeout": 20,
+        "recycling": {
+          "periodicRestart": {
+            "time": "00:00:00"
+          }
+        }
+      }
+    ],
+    "enableRemoteManagement": true,
+    "configureCertificates": false
+  },
+  "networkSettings": {
+    "useDHCP": false,
+    "ipAddress": "192.168.1.40",
+    "subnetMask": "255.255.255.0",
+    "defaultGateway": "192.168.1.1",
+    "preferredDNS": "192.168.1.10"
+  },
+  "advancedOptions": {
+    "installRSAT": false,
+    "joinDomain": true,
+    "domainName": "contoso.local",
+    "domainOU": "OU=WebServers,DC=contoso,DC=local",
+    "domainUsername": "",
+    "domainPassword": "",
+    "installUrlRewrite": true,
+    "installARR": false,
+    "installWebDeploy": true,
+    "configureFirewall": true
+  },
+  "scripts": {
+    "preDeploymentScript": "",
+    "postDeploymentScript": "",
+    "webServerConfigurationScript": ""
+  },
+  "tags": [
+    "Web Server",
+    "IIS",
+    "Windows Server",
+    "Default Template"
+  ]
+} 

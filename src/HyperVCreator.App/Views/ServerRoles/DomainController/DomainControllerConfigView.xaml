@@ -1,0 +1,183 @@
+<UserControl x:Class="HyperVCreator.App.Views.ServerRoles.DomainController.DomainControllerConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HyperVCreator.App.Views.ServerRoles.DomainController"
+             xmlns:vm="clr-namespace:HyperVCreator.App.ViewModels.ServerRoles.DomainController"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="800">
+    
+    <UserControl.DataContext>
+        <vm:DomainControllerConfigViewModel />
+    </UserControl.DataContext>
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Domain Controller Configuration" FontSize="24" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="Configure parameters for Domain Controller deployment" FontSize="14" Opacity="0.7"/>
+            <Separator Margin="0,10,0,0"/>
+        </StackPanel>
+        
+        <!-- Main Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Basic VM Settings -->
+                <GroupBox Header="Basic VM Settings" Margin="0,0,0,20" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Label Grid.Row="0" Grid.Column="0" Content="VM Name:" Margin="0,5,10,5"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding VMName, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,5"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Content="CPU Cores:" Margin="0,5,10,5"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CPUOptions}" SelectedItem="{Binding SelectedCPU}" Margin="0,5,0,5"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0" Content="Memory (GB):" Margin="0,5,10,5"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding MemoryOptions}" SelectedItem="{Binding SelectedMemory}" Margin="0,5,0,5"/>
+                        
+                        <Label Grid.Row="3" Grid.Column="0" Content="Virtual Switch:" Margin="0,5,10,5"/>
+                        <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding VirtualSwitches}" SelectedItem="{Binding SelectedVirtualSwitch}" Margin="0,5,0,5"/>
+                    </Grid>
+                </GroupBox>
+                
+                <!-- Domain Settings -->
+                <GroupBox Header="Domain Settings" Margin="0,0,0,20" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Label Grid.Row="0" Grid.Column="0" Content="Domain Name (FQDN):" Margin="0,5,10,5"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding DomainName, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,5"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Content="NetBIOS Name:" Margin="0,5,10,5"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NetBIOSName, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,5"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0" Content="Safe Mode Admin Password:" Margin="0,5,10,5"/>
+                        <PasswordBox Grid.Row="2" Grid.Column="1" Name="DSRMPasswordBox" Margin="0,5,0,5"/>
+                        
+                        <Label Grid.Row="3" Grid.Column="0" Content="Forest Functional Level:" Margin="0,5,10,5"/>
+                        <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding ForestFunctionalLevels}" SelectedItem="{Binding SelectedForestLevel}" Margin="0,5,0,5"/>
+                        
+                        <Label Grid.Row="4" Grid.Column="0" Content="Domain Functional Level:" Margin="0,5,10,5"/>
+                        <ComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding DomainFunctionalLevels}" SelectedItem="{Binding SelectedDomainLevel}" Margin="0,5,0,5"/>
+                    </Grid>
+                </GroupBox>
+                
+                <!-- DNS Settings -->
+                <GroupBox Header="DNS Settings" Margin="0,0,0,20" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Label Grid.Row="0" Grid.Column="0" Content="Configure DNS Server:" Margin="0,5,10,5"/>
+                        <CheckBox Grid.Row="0" Grid.Column="1" Content="Install and configure DNS Server" IsChecked="{Binding ConfigureDNS}" Margin="0,10,0,5"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Content="DNS Forwarders:" Margin="0,5,10,5"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding DNSForwarders, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,5" IsEnabled="{Binding ConfigureDNS}"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0" Content="Create Reverse Lookup Zone:" Margin="0,5,10,5"/>
+                        <CheckBox Grid.Row="2" Grid.Column="1" Content="Create reverse lookup zone" IsChecked="{Binding CreateReverseLookupZone}" Margin="0,10,0,5" IsEnabled="{Binding ConfigureDNS}"/>
+                    </Grid>
+                </GroupBox>
+                
+                <!-- Network Configuration -->
+                <GroupBox Header="Network Configuration" Margin="0,0,0,20" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Label Grid.Row="0" Grid.Column="0" Content="IP Configuration:" Margin="0,5,10,5"/>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,5,0,5">
+                            <RadioButton Content="DHCP" IsChecked="{Binding IsDHCP}" Margin="0,0,10,0"/>
+                            <RadioButton Content="Static IP" IsChecked="{Binding IsStaticIP}"/>
+                        </StackPanel>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Content="IP Address:" Margin="0,5,10,5"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding IPAddress, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,5" IsEnabled="{Binding IsStaticIP}"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0" Content="Subnet Mask:" Margin="0,5,10,5"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SubnetMask, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,5" IsEnabled="{Binding IsStaticIP}"/>
+                        
+                        <Label Grid.Row="3" Grid.Column="0" Content="Default Gateway:" Margin="0,5,10,5"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding DefaultGateway, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,5" IsEnabled="{Binding IsStaticIP}"/>
+                        
+                        <Label Grid.Row="4" Grid.Column="0" Content="Preferred DNS Server:" Margin="0,5,10,5"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding PreferredDNS, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,5" IsEnabled="{Binding IsStaticIP}"/>
+                    </Grid>
+                </GroupBox>
+                
+                <!-- Advanced Options -->
+                <GroupBox Header="Advanced Options" Margin="0,0,0,0" Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Label Grid.Row="0" Grid.Column="0" Content="Create Basic OU Structure:" Margin="0,5,10,5"/>
+                        <CheckBox Grid.Row="0" Grid.Column="1" Content="Create default organizational units" IsChecked="{Binding CreateOUStructure}" Margin="0,10,0,5"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Content="Configure Default Group Policies:" Margin="0,5,10,5"/>
+                        <CheckBox Grid.Row="1" Grid.Column="1" Content="Configure GPOs" IsChecked="{Binding ConfigureGPOs}" Margin="0,10,0,5"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0" Content="Install RSAT Tools:" Margin="0,5,10,5"/>
+                        <CheckBox Grid.Row="2" Grid.Column="1" Content="Install Remote Server Administration Tools" IsChecked="{Binding InstallRSAT}" Margin="0,10,0,5"/>
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+        
+        <!-- Footer with Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Cancel" Width="100" Margin="0,0,10,0" Command="{Binding CancelCommand}"/>
+            <Button Content="Create VM" Width="120" Background="#0078D7" Foreground="White" Command="{Binding CreateVMCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl> 

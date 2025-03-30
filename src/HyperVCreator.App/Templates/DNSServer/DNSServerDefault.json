@@ -1,0 +1,129 @@
+{
+  "templateName": "DNS Server - Default Template",
+  "description": "Default template for creating a basic DNS Server VM",
+  "version": "1.0.0",
+  "category": "Server Roles",
+  "serverRole": "DNSServer",
+  "createdBy": "Hyper-V Creator",
+  "lastModified": "2023-11-25",
+  "vmSettings": {
+    "vmName": "DNS01",
+    "cpuCores": 2,
+    "memoryGB": 4,
+    "dynamicMemory": true,
+    "virtualSwitch": "Default Switch",
+    "generation": 2,
+    "diskSizeGB": 80,
+    "enableVirtualizationExtensions": false,
+    "enableSecureBoot": true,
+    "installFromIso": true,
+    "isoPath": "C:\\ISOs\\WindowsServer2022.iso"
+  },
+  "operatingSystem": {
+    "osType": "Windows",
+    "osVersion": "Windows Server 2022",
+    "osEdition": "Standard",
+    "installGUI": true,
+    "productKey": "",
+    "timeZone": "UTC",
+    "administratorPassword": ""
+  },
+  "dnsSettings": {
+    "zones": [
+      {
+        "name": "contoso.local",
+        "zoneType": "Primary",
+        "dynamicUpdate": "Secure",
+        "replication": "Forest",
+        "records": [
+          {
+            "name": "www",
+            "type": "A",
+            "data": "192.168.1.40",
+            "ttl": 3600
+          },
+          {
+            "name": "mail",
+            "type": "A",
+            "data": "192.168.1.45",
+            "ttl": 3600
+          },
+          {
+            "name": "contoso.local",
+            "type": "MX",
+            "data": "10 mail.contoso.local.",
+            "ttl": 3600
+          }
+        ]
+      },
+      {
+        "name": "1.168.192.in-addr.arpa",
+        "zoneType": "Primary",
+        "dynamicUpdate": "Secure",
+        "replication": "Forest",
+        "records": [
+          {
+            "name": "10",
+            "type": "PTR",
+            "data": "dc01.contoso.local.",
+            "ttl": 3600
+          },
+          {
+            "name": "40",
+            "type": "PTR",
+            "data": "www.contoso.local.",
+            "ttl": 3600
+          },
+          {
+            "name": "45",
+            "type": "PTR",
+            "data": "mail.contoso.local.",
+            "ttl": 3600
+          }
+        ]
+      }
+    ],
+    "forwarders": [
+      "8.8.8.8",
+      "8.8.4.4"
+    ],
+    "rootHints": true,
+    "caching": true,
+    "enableDnsSec": true,
+    "enableGlobalQueryBlockList": true,
+    "enableFilteringv4": false,
+    "enableFilteringv6": false
+  },
+  "networkSettings": {
+    "useDHCP": false,
+    "ipAddress": "192.168.1.10",
+    "subnetMask": "255.255.255.0",
+    "defaultGateway": "192.168.1.1",
+    "preferredDNS": "127.0.0.1"
+  },
+  "advancedOptions": {
+    "installRSAT": true,
+    "joinDomain": true,
+    "domainName": "contoso.local",
+    "domainOU": "OU=DNSServers,DC=contoso,DC=local",
+    "domainUsername": "",
+    "domainPassword": "",
+    "configureLogSettings": true,
+    "dnsLogPath": "C:\\DNSLogs",
+    "logFileMaxSize": 500,
+    "logFileRolloverPeriod": "Daily",
+    "enableEventLogging": true,
+    "enableDebugLogging": false
+  },
+  "scripts": {
+    "preDeploymentScript": "",
+    "postDeploymentScript": "",
+    "dnsServerConfigurationScript": ""
+  },
+  "tags": [
+    "DNS Server",
+    "Name Resolution",
+    "Windows Server",
+    "Default Template"
+  ]
+} 

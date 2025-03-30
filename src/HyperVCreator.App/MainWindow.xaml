@@ -1,0 +1,162 @@
+<Window x:Class="HyperVCreator.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HyperVCreator.App"
+        xmlns:vm="clr-namespace:HyperVCreator.App.ViewModels"
+        mc:Ignorable="d"
+        Title="{Binding AppTitle}" Height="750" Width="1200"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.DataContext>
+        <vm:MainWindowViewModel />
+    </Window.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <!-- Top Menu Bar -->
+        <Menu Grid.Row="0" Background="{DynamicResource PrimaryBrush}" Foreground="White">
+            <MenuItem Header="File">
+                <MenuItem Header="Home" Command="{Binding NavigateHomeCommand}" />
+                <MenuItem Header="Templates" Command="{Binding NavigateToTemplatesCommand}" />
+                <MenuItem Header="Settings" Command="{Binding NavigateToSettingsCommand}" />
+                <Separator />
+                <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}" />
+            </MenuItem>
+            <MenuItem Header="Create VM">
+                <MenuItem Header="Domain Controller" Command="{Binding NavigateToDomainControllerCommand}" />
+                <MenuItem Header="Remote Desktop Session Host" Command="{Binding NavigateToRDSHCommand}" />
+                <MenuItem Header="SQL Server" Command="{Binding NavigateToSQLServerCommand}" />
+                <MenuItem Header="File Server" Command="{Binding NavigateToFileServerCommand}" />
+                <MenuItem Header="Web Server" IsEnabled="False" />
+                <MenuItem Header="DHCP Server" IsEnabled="False" />
+                <MenuItem Header="DNS Server" IsEnabled="False" />
+                <MenuItem Header="Custom VM" Command="{Binding NavigateToCustomVMCommand}" />
+            </MenuItem>
+            <MenuItem Header="Tools">
+                <MenuItem Header="Hyper-V Manager" IsEnabled="False" />
+                <MenuItem Header="PowerShell Console" IsEnabled="False" />
+                <MenuItem Header="VM Monitor" IsEnabled="False" />
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="Documentation" IsEnabled="False" />
+                <MenuItem Header="About" IsEnabled="False" />
+            </MenuItem>
+        </Menu>
+        
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <!-- Left Navigation Panel -->
+            <Border Grid.Column="0" Background="{DynamicResource BackgroundAlternateBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
+                <StackPanel Margin="10,20,10,10">
+                    <TextBlock Text="Navigation" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,15" />
+                    
+                    <!-- Home Button -->
+                    <Button Content="Home" 
+                            Command="{Binding NavigateHomeCommand}" 
+                            Margin="0,5" Padding="10,7" 
+                            HorizontalContentAlignment="Left" 
+                            Background="Transparent" 
+                            BorderThickness="0" />
+                    
+                    <!-- VM Creation Section -->
+                    <TextBlock Text="Create VM" FontSize="16" FontWeight="SemiBold" Margin="0,15,0,10" />
+                    
+                    <Button Content="Domain Controller" 
+                            Command="{Binding NavigateToDomainControllerCommand}" 
+                            Margin="0,5" Padding="10,7" 
+                            HorizontalContentAlignment="Left" 
+                            Background="Transparent" 
+                            BorderThickness="0" />
+                    
+                    <Button Content="Remote Desktop Session Host" 
+                            Command="{Binding NavigateToRDSHCommand}" 
+                            Margin="0,5" Padding="10,7" 
+                            HorizontalContentAlignment="Left" 
+                            Background="Transparent" 
+                            BorderThickness="0" />
+                    
+                    <Button Content="SQL Server" 
+                            Command="{Binding NavigateToSQLServerCommand}" 
+                            Margin="0,5" Padding="10,7" 
+                            HorizontalContentAlignment="Left" 
+                            Background="Transparent" 
+                            BorderThickness="0" />
+                    
+                    <Button Content="File Server" 
+                            Command="{Binding NavigateToFileServerCommand}" 
+                            Margin="0,5" Padding="10,7" 
+                            HorizontalContentAlignment="Left" 
+                            Background="Transparent" 
+                            BorderThickness="0" />
+                    
+                    <Button Content="Web Server" 
+                            Margin="0,5" Padding="10,7" 
+                            HorizontalContentAlignment="Left" 
+                            Background="Transparent" 
+                            BorderThickness="0" 
+                            IsEnabled="False" />
+                    
+                    <Button Content="DHCP Server" 
+                            Margin="0,5" Padding="10,7" 
+                            HorizontalContentAlignment="Left" 
+                            Background="Transparent" 
+                            BorderThickness="0" 
+                            IsEnabled="False" />
+                    
+                    <Button Content="DNS Server" 
+                            Margin="0,5" Padding="10,7" 
+                            HorizontalContentAlignment="Left" 
+                            Background="Transparent" 
+                            BorderThickness="0" 
+                            IsEnabled="False" />
+                    
+                    <Button Content="Custom VM" 
+                            Command="{Binding NavigateToCustomVMCommand}" 
+                            Margin="0,5" Padding="10,7" 
+                            HorizontalContentAlignment="Left" 
+                            Background="Transparent" 
+                            BorderThickness="0" />
+                    
+                    <!-- Tools Section -->
+                    <TextBlock Text="Manage" FontSize="16" FontWeight="SemiBold" Margin="0,15,0,10" />
+                    
+                    <Button Content="Templates" 
+                            Command="{Binding NavigateToTemplatesCommand}" 
+                            Margin="0,5" Padding="10,7" 
+                            HorizontalContentAlignment="Left" 
+                            Background="Transparent" 
+                            BorderThickness="0" />
+                    
+                    <Button Content="Settings" 
+                            Command="{Binding NavigateToSettingsCommand}" 
+                            Margin="0,5" Padding="10,7" 
+                            HorizontalContentAlignment="Left" 
+                            Background="Transparent" 
+                            BorderThickness="0" />
+                </StackPanel>
+            </Border>
+            
+            <!-- Content Area -->
+            <ContentControl Grid.Column="1" Content="{Binding CurrentView}" />
+        </Grid>
+        
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="2" Background="{DynamicResource PrimaryBrush}" Foreground="White">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}" />
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window> 

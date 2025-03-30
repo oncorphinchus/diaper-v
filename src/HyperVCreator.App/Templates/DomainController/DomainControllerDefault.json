@@ -1,0 +1,66 @@
+{
+  "templateName": "Domain Controller - Default Template",
+  "description": "Default template for creating a basic Domain Controller VM",
+  "version": "1.0.0",
+  "category": "Server Roles",
+  "serverRole": "DomainController",
+  "createdBy": "Hyper-V Creator",
+  "lastModified": "2023-11-25",
+  "vmSettings": {
+    "vmName": "DC01",
+    "cpuCores": 2,
+    "memoryGB": 4,
+    "dynamicMemory": true,
+    "virtualSwitch": "Default Switch",
+    "generation": 2,
+    "diskSizeGB": 80,
+    "enableVirtualizationExtensions": false,
+    "enableSecureBoot": true,
+    "installFromIso": true,
+    "isoPath": "C:\\ISOs\\WindowsServer2022.iso"
+  },
+  "operatingSystem": {
+    "osType": "Windows",
+    "osVersion": "Windows Server 2022",
+    "osEdition": "Standard",
+    "installGUI": true,
+    "productKey": "",
+    "timeZone": "UTC",
+    "administratorPassword": ""
+  },
+  "domainSettings": {
+    "domainName": "contoso.local",
+    "netBIOSName": "CONTOSO",
+    "forestFunctionalLevel": "Windows Server 2022",
+    "domainFunctionalLevel": "Windows Server 2022",
+    "dsrmPassword": ""
+  },
+  "networkSettings": {
+    "useDHCP": false,
+    "ipAddress": "192.168.1.10",
+    "subnetMask": "255.255.255.0",
+    "defaultGateway": "192.168.1.1",
+    "preferredDNS": "127.0.0.1"
+  },
+  "dnsSettings": {
+    "configureDNS": true,
+    "dnsForwarders": "8.8.8.8, 8.8.4.4",
+    "createReverseLookupZone": true
+  },
+  "advancedOptions": {
+    "createOUStructure": true,
+    "configureGPOs": true,
+    "installRSAT": true
+  },
+  "scripts": {
+    "preDeploymentScript": "",
+    "postDeploymentScript": "",
+    "domainConfigurationScript": ""
+  },
+  "tags": [
+    "Domain Controller",
+    "Active Directory",
+    "Windows Server",
+    "Default Template"
+  ]
+} 

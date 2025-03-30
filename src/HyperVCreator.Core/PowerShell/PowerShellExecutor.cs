@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
+using Microsoft.PowerShell.Commands;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace HyperVCreator.Core.PowerShell
     /// <summary>
     /// Result of PowerShell script execution
     /// </summary>
-    public class PowerShellResult
+    public class PowerShellExecutorResult
     {
         /// <summary>
         /// Whether the execution was successful
@@ -60,7 +61,7 @@ namespace HyperVCreator.Core.PowerShell
             _initialSessionState = InitialSessionState.CreateDefault();
             
             // Allow script execution
-            _initialSessionState.ExecutionPolicy = ExecutionPolicy.Bypass;
+            _initialSessionState.AuthorizationManager = new System.Management.Automation.AuthorizationManager("Microsoft.PowerShell");
             
             // Cache script paths
             CacheScriptPaths();
@@ -92,12 +93,12 @@ namespace HyperVCreator.Core.PowerShell
         /// <param name="scriptName">Name of the script (without .ps1 extension)</param>
         /// <param name="parameters">Script parameters</param>
         /// <returns>Result of the script execution</returns>
-        public PowerShellResult ExecuteScript(string scriptName, Dictionary<string, object> parameters)
+        public PowerShellExecutorResult ExecuteScript(string scriptName, Dictionary<string, object> parameters)
         {
             // Resolve script path
             if (!_scriptPaths.TryGetValue(scriptName, out var scriptPath))
             {
-                return new PowerShellResult
+                return new PowerShellExecutorResult
                 {
                     Success = false,
                     ErrorMessage = $"Script not found: {scriptName}"
@@ -113,9 +114,9 @@ namespace HyperVCreator.Core.PowerShell
         /// <param name="scriptPath">Full path to the script</param>
         /// <param name="parameters">Script parameters</param>
         /// <returns>Result of the script execution</returns>
-        public PowerShellResult ExecuteScriptFromPath(string scriptPath, Dictionary<string, object> parameters)
+        public PowerShellExecutorResult ExecuteScriptFromPath(string scriptPath, Dictionary<string, object> parameters)
         {
-            var result = new PowerShellResult
+            var result = new PowerShellExecutorResult
             {
                 Success = false,
                 Output = new Collection<PSObject>(),
@@ -137,7 +138,7 @@ namespace HyperVCreator.Core.PowerShell
                     runspace.Open();
                     
                     // Create a PowerShell instance
-                    using (var powerShell = PowerShell.Create())
+                    using (var powerShell = System.Management.Automation.PowerShell.Create())
                     {
                         powerShell.Runspace = runspace;
                         
@@ -155,7 +156,13 @@ namespace HyperVCreator.Core.PowerShell
                         
                         // Execute the script
                         result.Output = powerShell.Invoke();
-                        result.Errors = powerShell.Streams.Error;
+                        
+                        // Convert PSDataCollection to Collection for Errors
+                        result.Errors = new Collection<ErrorRecord>();
+                        foreach (var error in powerShell.Streams.Error)
+                        {
+                            result.Errors.Add(error);
+                        }
                         
                         // Check for errors
                         if (powerShell.HadErrors)
@@ -190,7 +197,7 @@ namespace HyperVCreator.Core.PowerShell
         /// <param name="scriptName">Name of the script (without .ps1 extension)</param>
         /// <param name="parameters">Script parameters</param>
         /// <returns>Task with the result of script execution</returns>
-        public Task<PowerShellResult> ExecuteScriptAsync(string scriptName, Dictionary<string, object> parameters)
+        public Task<PowerShellExecutorResult> ExecuteScriptAsync(string scriptName, Dictionary<string, object> parameters)
         {
             return Task.Run(() => ExecuteScript(scriptName, parameters));
         }
@@ -201,7 +208,7 @@ namespace HyperVCreator.Core.PowerShell
         /// <param name="scriptPath">Full path to the script</param>
         /// <param name="parameters">Script parameters</param>
         /// <returns>Task with the result of script execution</returns>
-        public Task<PowerShellResult> ExecuteScriptFromPathAsync(string scriptPath, Dictionary<string, object> parameters)
+        public Task<PowerShellExecutorResult> ExecuteScriptFromPathAsync(string scriptPath, Dictionary<string, object> parameters)
         {
             return Task.Run(() => ExecuteScriptFromPath(scriptPath, parameters));
         }

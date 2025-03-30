@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Management.Automation;
+using HyperVCreator.Core.Models;
+using HyperVCreator.Core.PowerShell;
 
 namespace HyperVCreator.Core.Services
 {

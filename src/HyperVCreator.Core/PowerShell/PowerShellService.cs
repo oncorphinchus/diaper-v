@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
+using Microsoft.PowerShell.Commands;
 using System.Threading;
 using System.Threading.Tasks;
 using HyperVCreator.Core.Services;
+using HyperVCreator.Core.Models;
 
 namespace HyperVCreator.Core.PowerShell
 {
@@ -27,7 +29,7 @@ namespace HyperVCreator.Core.PowerShell
         {
             // Initialize the runspace pool
             var initialSessionState = InitialSessionState.CreateDefault();
-            initialSessionState.ExecutionPolicy = ExecutionPolicy.Unrestricted;
+            initialSessionState.AuthorizationManager = new System.Management.Automation.AuthorizationManager("Microsoft.PowerShell");
             
             _runspacePool = RunspaceFactory.CreateRunspacePool(initialSessionState);
             _runspacePool.SetMinRunspaces(minRunspaces);
@@ -260,7 +262,10 @@ namespace HyperVCreator.Core.PowerShell
             // Create a progress handler
             var progressHandler = new Progress<PowerShellStatusUpdate>(update =>
             {
-                progress?.Report(update);
+                if (progress != null)
+                {
+                    progress.Report(update);
+                }
             });
             
             // Execute the script and track progress
@@ -269,7 +274,10 @@ namespace HyperVCreator.Core.PowerShell
             // Report progress updates
             foreach (var update in result.StatusUpdates)
             {
-                progressHandler.Report(update);
+                if (progress != null)
+                {
+                    progress.Report(update);
+                }
             }
             
             return result;
@@ -318,92 +326,5 @@ namespace HyperVCreator.Core.PowerShell
         {
             _runspacePool?.Dispose();
         }
-    }
-    
-    /// <summary>
-    /// Represents the result of a PowerShell script execution
-    /// </summary>
-    public class PowerShellResult
-    {
-        /// <summary>
-        /// Gets the collection of output objects
-        /// </summary>
-        public List<PSObject> Output { get; } = new List<PSObject>();
-        
-        /// <summary>
-        /// Gets the collection of error records
-        /// </summary>
-        public List<ErrorRecord> Errors { get; } = new List<ErrorRecord>();
-        
-        /// <summary>
-        /// Gets the collection of warning records
-        /// </summary>
-        public List<WarningRecord> Warnings { get; } = new List<WarningRecord>();
-        
-        /// <summary>
-        /// Gets the collection of information records
-        /// </summary>
-        public List<InformationRecord> Information { get; } = new List<InformationRecord>();
-        
-        /// <summary>
-        /// Gets the collection of status updates
-        /// </summary>
-        public List<PowerShellStatusUpdate> StatusUpdates { get; } = new List<PowerShellStatusUpdate>();
-        
-        /// <summary>
-        /// Gets or sets a value indicating whether the script execution has errors
-        /// </summary>
-        public bool HasErrors { get; set; }
-        
-        /// <summary>
-        /// Gets or sets a value indicating whether the operation was successful
-        /// </summary>
-        public bool? Success { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the result message
-        /// </summary>
-        public string Message { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the exception that occurred during execution, if any
-        /// </summary>
-        public Exception Exception { get; set; }
-        
-        /// <summary>
-        /// Gets a value indicating whether the result includes any status updates
-        /// </summary>
-        public bool HasStatusUpdates => StatusUpdates.Count > 0;
-        
-        /// <summary>
-        /// Gets the first status update message, or null if none
-        /// </summary>
-        public string FirstStatusMessage => HasStatusUpdates ? StatusUpdates[0].Message : null;
-        
-        /// <summary>
-        /// Gets the last status update message, or null if none
-        /// </summary>
-        public string LastStatusMessage => HasStatusUpdates ? StatusUpdates[StatusUpdates.Count - 1].Message : null;
-        
-        /// <summary>
-        /// Gets the last percent complete value, or 0 if none
-        /// </summary>
-        public int LastPercentComplete => HasStatusUpdates ? StatusUpdates[StatusUpdates.Count - 1].PercentComplete : 0;
-    }
-    
-    /// <summary>
-    /// Represents a status update from a PowerShell script
-    /// </summary>
-    public class PowerShellStatusUpdate
-    {
-        /// <summary>
-        /// Gets or sets the status message
-        /// </summary>
-        public string Message { get; set; }
-        
-        /// <summary>
-        /// Gets or sets the percent complete value (0-100)
-        /// </summary>
-        public int PercentComplete { get; set; }
     }
 } 

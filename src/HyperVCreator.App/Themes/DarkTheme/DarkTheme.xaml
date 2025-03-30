@@ -1,0 +1,197 @@
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../BaseTheme.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
+    <!-- Theme Colors -->
+    <Color x:Key="PrimaryColor">#1E88E5</Color>
+    <Color x:Key="SecondaryColor">#757575</Color>
+    <Color x:Key="AccentColor">#64B5F6</Color>
+    <Color x:Key="BackgroundColor">#121212</Color>
+    <Color x:Key="BackgroundAlternateColor">#1F1F1F</Color>
+    <Color x:Key="ForegroundColor">#EEEEEE</Color>
+    <Color x:Key="ForegroundLightColor">#BBBBBB</Color>
+    <Color x:Key="BorderColor">#424242</Color>
+    <Color x:Key="ErrorColor">#CF6679</Color>
+    <Color x:Key="SuccessColor">#4CAF50</Color>
+    <Color x:Key="WarningColor">#FFC107</Color>
+    <Color x:Key="InformationColor">#90CAF9</Color>
+    
+    <!-- Theme Brushes -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/>
+    <SolidColorBrush x:Key="BackgroundAlternateBrush" Color="{StaticResource BackgroundAlternateColor}"/>
+    <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}"/>
+    <SolidColorBrush x:Key="ForegroundLightBrush" Color="{StaticResource ForegroundLightColor}"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}"/>
+    <SolidColorBrush x:Key="InformationBrush" Color="{StaticResource InformationColor}"/>
+    
+    <!-- Window Style -->
+    <Style TargetType="Window">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="FontFamily" Value="{StaticResource DefaultFontFamily}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeNormal}"/>
+    </Style>
+    
+    <!-- Button Styles -->
+    <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource StandardBorderThickness}"/>
+    </Style>
+    
+    <Style x:Key="SecondaryButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource AccentColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AccentColor}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource StandardBorderThickness}"/>
+    </Style>
+    
+    <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="{StaticResource ErrorBrush}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource StandardBorderThickness}"/>
+    </Style>
+    
+    <!-- TextBox Style -->
+    <Style TargetType="TextBox" BasedOn="{StaticResource BaseTextBoxStyle}">
+        <Setter Property="Background" Value="{StaticResource BackgroundAlternateBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource StandardBorderThickness}"/>
+        <Setter Property="CaretBrush" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="SelectionBrush" Value="{StaticResource AccentBrush}"/>
+    </Style>
+    
+    <!-- ComboBox Style -->
+    <Style TargetType="ComboBox" BasedOn="{StaticResource BaseComboBoxStyle}">
+        <Setter Property="Background" Value="{StaticResource BackgroundAlternateBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource StandardBorderThickness}"/>
+    </Style>
+    
+    <!-- CheckBox Style -->
+    <Style TargetType="CheckBox" BasedOn="{StaticResource BaseCheckBoxStyle}">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+    </Style>
+    
+    <!-- TabControl Style -->
+    <Style TargetType="TabControl" BasedOn="{StaticResource BaseTabControlStyle}">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource StandardBorderThickness}"/>
+    </Style>
+    
+    <!-- TabItem Style -->
+    <Style TargetType="TabItem" BasedOn="{StaticResource BaseTabItemStyle}">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundAlternateBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1,1,1,0"/>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- DataGrid Styles -->
+    <Style TargetType="DataGrid" BasedOn="{StaticResource BaseDataGridStyle}">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource StandardBorderThickness}"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="AlternatingRowBackground" Value="{StaticResource BackgroundAlternateColor}"/>
+    </Style>
+    
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="8,6"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    
+    <Style TargetType="DataGridCell" BasedOn="{StaticResource BaseDataGridCellStyle}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- PasswordBox Style -->
+    <Style TargetType="PasswordBox" BasedOn="{StaticResource BasePasswordBoxStyle}">
+        <Setter Property="Background" Value="{StaticResource BackgroundAlternateBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource StandardBorderThickness}"/>
+        <Setter Property="SelectionBrush" Value="{StaticResource AccentBrush}"/>
+    </Style>
+    
+    <!-- ProgressBar Style -->
+    <Style TargetType="ProgressBar" BasedOn="{StaticResource BaseProgressBarStyle}">
+        <Setter Property="Background" Value="{StaticResource BackgroundAlternateBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource StandardBorderThickness}"/>
+    </Style>
+    
+    <!-- Slider Style -->
+    <Style TargetType="Slider" BasedOn="{StaticResource BaseSliderStyle}">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundAlternateBrush}"/>
+    </Style>
+    
+    <!-- TextBlock Style -->
+    <Style TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+    </Style>
+    
+    <!-- GroupBox Style -->
+    <Style TargetType="GroupBox" BasedOn="{StaticResource BaseGroupBoxStyle}">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource StandardBorderThickness}"/>
+    </Style>
+    
+    <!-- ListBox Style -->
+    <Style TargetType="ListBox" BasedOn="{StaticResource BaseListBoxStyle}">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{StaticResource StandardBorderThickness}"/>
+    </Style>
+    
+    <Style TargetType="ListBoxItem">
+        <Setter Property="Padding" Value="5,3"/>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Opacity" Value="0.7"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary> 

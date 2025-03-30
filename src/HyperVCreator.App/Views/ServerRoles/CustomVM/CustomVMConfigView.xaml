@@ -1,0 +1,253 @@
+<UserControl x:Class="HyperVCreator.App.Views.ServerRoles.CustomVM.CustomVMConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:HyperVCreator.App.Views.ServerRoles.CustomVM"
+             xmlns:vm="clr-namespace:HyperVCreator.App.ViewModels.ServerRoles.CustomVM"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="800">
+    
+    <UserControl.DataContext>
+        <vm:CustomVMConfigViewModel />
+    </UserControl.DataContext>
+    
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Custom VM Configuration" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,10" />
+            <TextBlock Text="Create a virtual machine with custom settings" FontSize="14" Opacity="0.8" />
+            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Margin="0,10,0,0" />
+        </StackPanel>
+        
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <!-- Left Column -->
+                <StackPanel Grid.Column="0" Margin="0,0,10,0" Visibility="{Binding IsCreating, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    <GroupBox Header="Basic Settings" Margin="0,0,0,15" Padding="10">
+                        <StackPanel>
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="VM Name:" Width="120" VerticalAlignment="Center" />
+                                <TextBox Text="{Binding VMName, UpdateSourceTrigger=PropertyChanged}" />
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Computer Name:" Width="120" VerticalAlignment="Center" />
+                                <TextBox Text="{Binding ComputerName}" />
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Description:" Width="120" VerticalAlignment="Center" />
+                                <TextBox Text="{Binding Description}" />
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="OS Version:" Width="120" VerticalAlignment="Center" />
+                                <ComboBox ItemsSource="{Binding AvailableOSVersions}" SelectedItem="{Binding OSVersion}" />
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Product Key:" Width="120" VerticalAlignment="Center" />
+                                <TextBox Text="{Binding ProductKey}" />
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Admin Password:" Width="120" VerticalAlignment="Center" />
+                                <PasswordBox x:Name="AdminPasswordBox" />
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="ISO Path:" Width="120" VerticalAlignment="Center" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0" Text="{Binding ISOPath}" IsReadOnly="True" />
+                                    <Button Grid.Column="1" Content="Browse..." Command="{Binding BrowseISOCommand}" Width="70" Margin="5,0,0,0" />
+                                </Grid>
+                            </DockPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    
+                    <GroupBox Header="Hardware Configuration" Margin="0,0,0,15" Padding="10">
+                        <StackPanel>
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="CPU Count:" Width="120" VerticalAlignment="Center" />
+                                <ComboBox SelectedValue="{Binding CPUCount}">
+                                    <ComboBoxItem Content="1" />
+                                    <ComboBoxItem Content="2" />
+                                    <ComboBoxItem Content="4" />
+                                    <ComboBoxItem Content="8" />
+                                </ComboBox>
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Memory (GB):" Width="120" VerticalAlignment="Center" />
+                                <ComboBox SelectedValue="{Binding MemoryGB}">
+                                    <ComboBoxItem Content="1" />
+                                    <ComboBoxItem Content="2" />
+                                    <ComboBoxItem Content="4" />
+                                    <ComboBoxItem Content="8" />
+                                    <ComboBoxItem Content="16" />
+                                    <ComboBoxItem Content="32" />
+                                </ComboBox>
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Storage (GB):" Width="120" VerticalAlignment="Center" />
+                                <ComboBox SelectedValue="{Binding StorageGB}">
+                                    <ComboBoxItem Content="40" />
+                                    <ComboBoxItem Content="60" />
+                                    <ComboBoxItem Content="80" />
+                                    <ComboBoxItem Content="100" />
+                                    <ComboBoxItem Content="200" />
+                                    <ComboBoxItem Content="500" />
+                                </ComboBox>
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="VM Generation:" Width="120" VerticalAlignment="Center" />
+                                <ComboBox SelectedValue="{Binding Generation}">
+                                    <ComboBoxItem Content="1" />
+                                    <ComboBoxItem Content="2" />
+                                </ComboBox>
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Enable Secure Boot:" Width="120" VerticalAlignment="Center" />
+                                <CheckBox IsChecked="{Binding EnableSecureBoot}" IsEnabled="{Binding Generation, Converter={StaticResource IntToBoolConverter}, ConverterParameter=2}" VerticalAlignment="Center" />
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Additional Disk (GB):" Width="120" VerticalAlignment="Center" />
+                                <ComboBox SelectedValue="{Binding AdditionalDiskSizeGB}">
+                                    <ComboBoxItem Content="0" />
+                                    <ComboBoxItem Content="20" />
+                                    <ComboBoxItem Content="50" />
+                                    <ComboBoxItem Content="100" />
+                                    <ComboBoxItem Content="200" />
+                                    <ComboBoxItem Content="500" />
+                                </ComboBox>
+                            </DockPanel>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+                
+                <!-- Right Column -->
+                <StackPanel Grid.Column="1" Margin="10,0,0,0" Visibility="{Binding IsCreating, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    <GroupBox Header="Network Configuration" Margin="0,0,0,15" Padding="10">
+                        <StackPanel>
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Virtual Switch:" Width="120" VerticalAlignment="Center" />
+                                <ComboBox ItemsSource="{Binding AvailableVirtualSwitches}" SelectedItem="{Binding VirtualSwitch}" />
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Dynamic IP:" Width="120" VerticalAlignment="Center" />
+                                <CheckBox IsChecked="{Binding DynamicIP}" VerticalAlignment="Center" />
+                            </DockPanel>
+                            
+                            <StackPanel IsEnabled="{Binding DynamicIP, Converter={StaticResource InverseBoolConverter}}">
+                                <DockPanel Margin="0,5">
+                                    <TextBlock Text="IP Address:" Width="120" VerticalAlignment="Center" />
+                                    <TextBox Text="{Binding IPAddress}" />
+                                </DockPanel>
+                                
+                                <DockPanel Margin="0,5">
+                                    <TextBlock Text="Subnet Mask:" Width="120" VerticalAlignment="Center" />
+                                    <TextBox Text="{Binding SubnetMask}" />
+                                </DockPanel>
+                                
+                                <DockPanel Margin="0,5">
+                                    <TextBlock Text="Default Gateway:" Width="120" VerticalAlignment="Center" />
+                                    <TextBox Text="{Binding DefaultGateway}" />
+                                </DockPanel>
+                                
+                                <DockPanel Margin="0,5">
+                                    <TextBlock Text="DNS Server:" Width="120" VerticalAlignment="Center" />
+                                    <TextBox Text="{Binding DNSServer}" />
+                                </DockPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    
+                    <GroupBox Header="Advanced Settings" Margin="0,0,0,15" Padding="10">
+                        <StackPanel>
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Use Unattend XML:" Width="120" VerticalAlignment="Center" />
+                                <CheckBox IsChecked="{Binding UseUnattendXML}" VerticalAlignment="Center" />
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Auto Start VM:" Width="120" VerticalAlignment="Center" />
+                                <CheckBox IsChecked="{Binding AutoStart}" VerticalAlignment="Center" />
+                            </DockPanel>
+                            
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Time Zone:" Width="120" VerticalAlignment="Center" />
+                                <ComboBox SelectedValue="{Binding TimeZone}">
+                                    <ComboBoxItem Content="85" />
+                                    <ComboBoxItem Content="110" />
+                                </ComboBox>
+                            </DockPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    
+                    <GroupBox Header="Templates" Margin="0,0,0,15" Padding="10">
+                        <StackPanel>
+                            <Button Content="Load from Template" Command="{Binding LoadTemplateCommand}" Margin="0,5" />
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+                
+                <!-- Progress Section -->
+                <Grid Grid.Column="0" Grid.ColumnSpan="2" Visibility="{Binding IsCreating, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Creating Custom Virtual Machine" FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,20" />
+                        
+                        <TextBlock Text="{Binding StatusMessage}" HorizontalAlignment="Center" Margin="0,0,0,10" />
+                        
+                        <ProgressBar Value="{Binding ProgressValue}" Height="20" Margin="50,10" />
+                        
+                        <TextBlock Text="{Binding ProgressValue, StringFormat={}{0}%}" HorizontalAlignment="Center" Margin="0,5,0,20" />
+                        
+                        <Button Content="Cancel" Command="{Binding CancelCommand}" Width="100" Margin="0,10" />
+                        
+                        <Expander Header="Show Details" IsExpanded="{Binding ShowProgressDetails}">
+                            <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Margin="0,10,0,0">
+                                <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding CreationLogs}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding}" Margin="5,2" TextWrapping="Wrap" />
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Border>
+                        </Expander>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+        
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0"
+                    Visibility="{Binding IsCreating, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+            <Button Content="Create VM" Command="{Binding CreateVMCommand}" Width="120" Height="35" />
+        </StackPanel>
+    </Grid>
+</UserControl> 

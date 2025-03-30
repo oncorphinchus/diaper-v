@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using HyperVCreator.Core.Models;
 
 namespace HyperVCreator.Core.Services
 {
@@ -13,18 +15,71 @@ namespace HyperVCreator.Core.Services
     public class TemplateService
     {
         private readonly string _templateDirectory;
+        private readonly Dictionary<string, VMTemplate> _templates;
+        private readonly JsonSerializerOptions _jsonOptions;
         
-        public TemplateService(string templateDirectory = null)
+        public TemplateService(string customTemplateDirectory = null)
         {
-            // Use provided directory or default to the application's template directory
-            _templateDirectory = templateDirectory ?? 
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates");
-            
-            // Ensure the directory exists
+            _jsonOptions = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+
+            // Set template directory
+            if (string.IsNullOrWhiteSpace(customTemplateDirectory))
+            {
+                string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                _templateDirectory = Path.Combine(appDataPath, "HyperVCreator", "Templates");
+            }
+            else
+            {
+                _templateDirectory = customTemplateDirectory;
+            }
+
+            // Ensure template directory exists
             if (!Directory.Exists(_templateDirectory))
             {
                 Directory.CreateDirectory(_templateDirectory);
             }
+
+            // Load templates
+            _templates = new Dictionary<string, VMTemplate>();
+            LoadTemplates();
+        }
+        
+        /// <summary>
+        /// Gets all available templates
+        /// </summary>
+        /// <returns>A list of template objects</returns>
+        public List<VMTemplate> GetAllTemplates()
+        {
+            return _templates.Values.ToList();
+        }
+        
+        /// <summary>
+        /// Gets a template by name
+        /// </summary>
+        /// <param name="name">The name of the template</param>
+        /// <returns>The template with the specified name, or null if not found</returns>
+        public VMTemplate GetTemplateByName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+            
+            return _templates.TryGetValue(name, out var template) ? template : null;
+        }
+        
+        /// <summary>
+        /// Gets templates for a specific server role
+        /// </summary>
+        /// <param name="role">The server role to filter by</param>
+        /// <returns>A list of templates for the specified role</returns>
+        public async Task<List<VMTemplate>> GetTemplatesByRoleAsync(string role)
+        {
+            var allTemplates = await GetAllTemplatesAsync();
+            return allTemplates.Where(t => t.ServerRole.Equals(role, StringComparison.OrdinalIgnoreCase)).ToList();
         }
         
         /// <summary>
@@ -53,17 +108,6 @@ namespace HyperVCreator.Core.Services
             }
             
             return templates;
-        }
-        
-        /// <summary>
-        /// Gets templates for a specific server role
-        /// </summary>
-        /// <param name="role">The server role to filter by</param>
-        /// <returns>A list of templates for the specified role</returns>
-        public async Task<List<VMTemplate>> GetTemplatesByRoleAsync(string role)
-        {
-            var allTemplates = await GetAllTemplatesAsync();
-            return allTemplates.Where(t => t.ServerRole.Equals(role, StringComparison.OrdinalIgnoreCase)).ToList();
         }
         
         /// <summary>
@@ -147,19 +191,89 @@ namespace HyperVCreator.Core.Services
         }
         
         /// <summary>
-        /// Deletes a template file
+        /// Saves a template
         /// </summary>
-        /// <param name="fileName">The name of the template file to delete</param>
-        public void DeleteTemplate(string fileName)
+        /// <param name="template">The template to save</param>
+        /// <returns>True if the save was successful, false otherwise</returns>
+        public bool SaveTemplate(VMTemplate template)
         {
-            var filePath = Path.Combine(_templateDirectory, fileName);
-            
-            if (!File.Exists(filePath))
+            if (template == null || string.IsNullOrWhiteSpace(template.TemplateName))
             {
-                throw new FileNotFoundException($"Template file not found: {filePath}");
+                return false;
             }
             
-            File.Delete(filePath);
+            try
+            {
+                // Update the template in memory
+                _templates[template.TemplateName] = template;
+                
+                // Save to disk
+                var fileName = $"{template.ServerRole}-{template.TemplateName.Replace(" ", "-")}.json";
+                var filePath = Path.Combine(_templateDirectory, fileName);
+                
+                // Update metadata
+                template.Metadata.LastModifiedDate = DateTime.Now;
+                
+                // Serialize and save
+                var json = JsonSerializer.Serialize(template, _jsonOptions);
+                File.WriteAllText(filePath, json);
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log error
+                Console.WriteLine($"Error saving template: {ex.Message}");
+                return false;
+            }
+        }
+        
+        /// <summary>
+        /// Deletes a template file
+        /// </summary>
+        /// <param name="templateName">The name of the template to delete</param>
+        /// <returns>True if the template was deleted, false otherwise</returns>
+        public bool DeleteTemplate(string templateName)
+        {
+            if (string.IsNullOrWhiteSpace(templateName) || !_templates.ContainsKey(templateName))
+            {
+                return false;
+            }
+            
+            try
+            {
+                // Find the file
+                var template = _templates[templateName];
+                var filePattern = $"{template.ServerRole}-{templateName.Replace(" ", "-")}*.json";
+                var files = Directory.GetFiles(_templateDirectory, filePattern);
+                
+                if (files.Length == 0)
+                {
+                    // Try a more general search
+                    files = Directory.GetFiles(_templateDirectory, "*.json");
+                    files = files.Where(f => Path.GetFileNameWithoutExtension(f).Contains(templateName)).ToArray();
+                }
+                
+                if (files.Length > 0)
+                {
+                    // Delete the file(s)
+                    foreach (var file in files)
+                    {
+                        File.Delete(file);
+                    }
+                }
+                
+                // Remove from memory
+                _templates.Remove(templateName);
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log error
+                Console.WriteLine($"Error deleting template: {ex.Message}");
+                return false;
+            }
         }
         
         /// <summary>
@@ -192,79 +306,294 @@ namespace HyperVCreator.Core.Services
             
             return clone;
         }
-    }
-    
-    /// <summary>
-    /// Represents a virtual machine template
-    /// </summary>
-    public class VMTemplate
-    {
-        public string TemplateName { get; set; }
-        public string ServerRole { get; set; }
-        public string Description { get; set; }
-        public HardwareConfig HardwareConfiguration { get; set; }
-        public NetworkConfig NetworkConfiguration { get; set; }
-        public OSConfig OSConfiguration { get; set; }
-        public AdditionalConfig AdditionalConfiguration { get; set; }
-        public TemplateMetadata Metadata { get; set; } = new TemplateMetadata();
-    }
-    
-    public class HardwareConfig
-    {
-        public int ProcessorCount { get; set; } = 2;
-        public int MemoryGB { get; set; } = 4;
-        public int StorageGB { get; set; } = 80;
-        public int Generation { get; set; } = 2;
-        public bool EnableSecureBoot { get; set; } = true;
-        public List<DiskConfig> AdditionalDisks { get; set; } = new List<DiskConfig>();
-    }
-    
-    public class DiskConfig
-    {
-        public int SizeGB { get; set; }
-        public string Letter { get; set; }
-        public string Label { get; set; }
-    }
-    
-    public class NetworkConfig
-    {
-        public string VirtualSwitch { get; set; } = "Default Switch";
-        public bool DynamicIP { get; set; } = true;
-        public StaticIPConfig StaticIPConfiguration { get; set; } = new StaticIPConfig();
-    }
-    
-    public class StaticIPConfig
-    {
-        public string IPAddress { get; set; }
-        public string SubnetMask { get; set; } = "255.255.255.0";
-        public string DefaultGateway { get; set; }
-        public List<string> DNSServers { get; set; } = new List<string>();
-    }
-    
-    public class OSConfig
-    {
-        public string OSVersion { get; set; } = "Windows Server 2022 Standard";
-        public string ProductKey { get; set; }
-        public int TimeZone { get; set; } = 85;
-        public string AdminPassword { get; set; } = "P@ssw0rd";
-        public string ComputerName { get; set; }
-        public string Organization { get; set; } = "Custom Organization";
-        public string Owner { get; set; } = "Administrator";
-    }
-    
-    public class AdditionalConfig
-    {
-        public bool AutoStartVM { get; set; }
-        public bool UseUnattendXML { get; set; } = true;
-        public bool EnableRDP { get; set; } = true;
-        public bool EnablePSRemoting { get; set; } = true;
-    }
-    
-    public class TemplateMetadata
-    {
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public DateTime LastModifiedDate { get; set; } = DateTime.Now;
-        public string Author { get; set; } = Environment.UserName;
-        public List<string> Tags { get; set; } = new List<string>();
+
+        private void LoadTemplates()
+        {
+            try
+            {
+                // Load from template directory
+                string[] files = Directory.GetFiles(_templateDirectory, "*.json");
+                foreach (string file in files)
+                {
+                    try
+                    {
+                        string json = File.ReadAllText(file);
+                        VMTemplate template = JsonSerializer.Deserialize<VMTemplate>(json, _jsonOptions);
+                        
+                        if (template != null && !string.IsNullOrWhiteSpace(template.TemplateName))
+                        {
+                            _templates[template.TemplateName] = template;
+                        }
+                    }
+                    catch
+                    {
+                        // Skip invalid template files
+                    }
+                }
+
+                // Load default templates if none exist
+                if (_templates.Count == 0)
+                {
+                    LoadDefaultTemplates();
+                }
+            }
+            catch (Exception)
+            {
+                // Fallback to default templates
+                LoadDefaultTemplates();
+            }
+        }
+
+        private void LoadDefaultTemplates()
+        {
+            // Load built-in templates
+            CreateDefaultCustomVMTemplate();
+            CreateDefaultDomainControllerTemplate();
+            CreateDefaultFileServerTemplate();
+            CreateDefaultSQLServerTemplate();
+            CreateDefaultRDSHTemplate();
+            CreateDefaultWebServerTemplate();
+            CreateDefaultDHCPServerTemplate();
+            CreateDefaultDNSServerTemplate();
+        }
+
+        private void CreateDefaultCustomVMTemplate()
+        {
+            VMTemplate template = new VMTemplate
+            {
+                TemplateName = "Default Custom VM",
+                ServerRole = "CustomVM",
+                Description = "A customizable virtual machine template",
+                HardwareConfiguration = new HardwareConfig
+                {
+                    ProcessorCount = 2,
+                    MemoryGB = 4,
+                    StorageGB = 80,
+                    Generation = 2,
+                    EnableSecureBoot = true,
+                    AdditionalDisks = new List<DiskConfig>
+                    {
+                        new DiskConfig { SizeGB = 0, Letter = "D", Label = "Data" }
+                    }
+                },
+                NetworkConfiguration = new NetworkConfig
+                {
+                    VirtualSwitch = "Default Switch",
+                    DynamicIP = true,
+                    StaticIPConfiguration = new StaticIPConfig
+                    {
+                        IPAddress = "",
+                        SubnetMask = "255.255.255.0",
+                        DefaultGateway = "",
+                        DNSServers = new List<string> { "", "" }
+                    }
+                },
+                OSConfiguration = new OSConfig
+                {
+                    OSVersion = "Windows Server 2022 Standard",
+                    ProductKey = "",
+                    TimeZone = 85,
+                    AdminPassword = "P@ssw0rd",
+                    ComputerName = "",
+                    Organization = "Custom Organization",
+                    Owner = "Administrator"
+                },
+                AdditionalConfiguration = new AdditionalConfig
+                {
+                    AutoStartVM = false,
+                    UseUnattendXML = true,
+                    EnableRDP = true,
+                    EnablePSRemoting = true
+                },
+                Metadata = new TemplateMetadata
+                {
+                    CreatedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    LastModifiedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    Author = "System",
+                    Tags = new List<string> { "Custom", "Basic" }
+                }
+            };
+
+            _templates[template.TemplateName] = template;
+            SaveTemplateAsync(template).Wait();
+        }
+
+        private void CreateDefaultDomainControllerTemplate()
+        {
+            VMTemplate template = new VMTemplate
+            {
+                TemplateName = "Default Domain Controller",
+                ServerRole = "DomainController",
+                Description = "Default template for Domain Controller",
+                HardwareConfiguration = new HardwareConfig
+                {
+                    ProcessorCount = 2,
+                    MemoryGB = 4,
+                    StorageGB = 80,
+                    Generation = 2,
+                    EnableSecureBoot = true,
+                    AdditionalDisks = new List<DiskConfig>()
+                },
+                NetworkConfiguration = new NetworkConfig
+                {
+                    VirtualSwitch = "Default Switch",
+                    DynamicIP = false,
+                    StaticIPConfiguration = new StaticIPConfig
+                    {
+                        IPAddress = "192.168.1.10",
+                        SubnetMask = "255.255.255.0",
+                        DefaultGateway = "192.168.1.1",
+                        DNSServers = new List<string> { "127.0.0.1", "8.8.8.8" }
+                    }
+                },
+                OSConfiguration = new OSConfig
+                {
+                    OSVersion = "Windows Server 2022 Standard",
+                    ProductKey = "",
+                    TimeZone = 85,
+                    AdminPassword = "P@ssw0rd",
+                    ComputerName = "DC01",
+                    Organization = "Contoso",
+                    Owner = "Administrator"
+                },
+                AdditionalConfiguration = new AdditionalConfig
+                {
+                    AutoStartVM = true,
+                    UseUnattendXML = true,
+                    EnableRDP = true,
+                    EnablePSRemoting = true
+                },
+                Metadata = new TemplateMetadata
+                {
+                    CreatedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    LastModifiedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    Author = "System",
+                    Tags = new List<string> { "DomainController", "Active Directory" }
+                }
+            };
+
+            _templates[template.TemplateName] = template;
+            SaveTemplateAsync(template).Wait();
+        }
+
+        private void CreateDefaultFileServerTemplate()
+        {
+            VMTemplate template = new VMTemplate
+            {
+                TemplateName = "Default File Server",
+                ServerRole = "FileServer",
+                Description = "Default template for File Server",
+                Metadata = new TemplateMetadata
+                {
+                    CreatedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    LastModifiedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    Author = "System",
+                    Tags = new List<string> { "FileServer" }
+                }
+            };
+
+            _templates[template.TemplateName] = template;
+            SaveTemplateAsync(template).Wait();
+        }
+
+        private void CreateDefaultSQLServerTemplate()
+        {
+            VMTemplate template = new VMTemplate
+            {
+                TemplateName = "Default SQL Server",
+                ServerRole = "SQLServer",
+                Description = "Default template for SQL Server",
+                Metadata = new TemplateMetadata
+                {
+                    CreatedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    LastModifiedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    Author = "System",
+                    Tags = new List<string> { "SQLServer", "Database" }
+                }
+            };
+
+            _templates[template.TemplateName] = template;
+            SaveTemplateAsync(template).Wait();
+        }
+
+        private void CreateDefaultRDSHTemplate()
+        {
+            VMTemplate template = new VMTemplate
+            {
+                TemplateName = "Default RDSH",
+                ServerRole = "RDSH",
+                Description = "Default template for Remote Desktop Session Host",
+                Metadata = new TemplateMetadata
+                {
+                    CreatedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    LastModifiedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    Author = "System",
+                    Tags = new List<string> { "RDSH", "RemoteDesktop" }
+                }
+            };
+
+            _templates[template.TemplateName] = template;
+            SaveTemplateAsync(template).Wait();
+        }
+
+        private void CreateDefaultWebServerTemplate()
+        {
+            VMTemplate template = new VMTemplate
+            {
+                TemplateName = "Default Web Server",
+                ServerRole = "WebServer",
+                Description = "Default template for Web Server",
+                Metadata = new TemplateMetadata
+                {
+                    CreatedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    LastModifiedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    Author = "System",
+                    Tags = new List<string> { "WebServer", "IIS" }
+                }
+            };
+
+            _templates[template.TemplateName] = template;
+            SaveTemplateAsync(template).Wait();
+        }
+
+        private void CreateDefaultDHCPServerTemplate()
+        {
+            VMTemplate template = new VMTemplate
+            {
+                TemplateName = "Default DHCP Server",
+                ServerRole = "DHCPServer",
+                Description = "Default template for DHCP Server",
+                Metadata = new TemplateMetadata
+                {
+                    CreatedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    LastModifiedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    Author = "System",
+                    Tags = new List<string> { "DHCPServer" }
+                }
+            };
+
+            _templates[template.TemplateName] = template;
+            SaveTemplateAsync(template).Wait();
+        }
+
+        private void CreateDefaultDNSServerTemplate()
+        {
+            VMTemplate template = new VMTemplate
+            {
+                TemplateName = "Default DNS Server",
+                ServerRole = "DNSServer",
+                Description = "Default template for DNS Server",
+                Metadata = new TemplateMetadata
+                {
+                    CreatedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    LastModifiedDate = DateTime.Parse("2023-03-29T00:00:00"),
+                    Author = "System",
+                    Tags = new List<string> { "DNSServer" }
+                }
+            };
+
+            _templates[template.TemplateName] = template;
+            SaveTemplateAsync(template).Wait();
+        }
     }
 } 

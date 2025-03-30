@@ -1,0 +1,66 @@
+{
+  "templateName": "Remote Desktop Session Host - Default Template",
+  "description": "Default template for creating a basic RDSH VM",
+  "version": "1.0.0",
+  "category": "Server Roles",
+  "serverRole": "RDSH",
+  "createdBy": "Hyper-V Creator",
+  "lastModified": "2023-11-25",
+  "vmSettings": {
+    "vmName": "RDSH01",
+    "cpuCores": 4,
+    "memoryGB": 8,
+    "dynamicMemory": true,
+    "virtualSwitch": "Default Switch",
+    "generation": 2,
+    "diskSizeGB": 100,
+    "enableVirtualizationExtensions": false,
+    "enableSecureBoot": true,
+    "installFromIso": true,
+    "isoPath": "C:\\ISOs\\WindowsServer2022.iso"
+  },
+  "operatingSystem": {
+    "osType": "Windows",
+    "osVersion": "Windows Server 2022",
+    "osEdition": "Standard",
+    "installGUI": true,
+    "productKey": "",
+    "timeZone": "UTC",
+    "administratorPassword": ""
+  },
+  "rdshSettings": {
+    "connectionBroker": "",
+    "collectionName": "Desktop Collection",
+    "useHA": false,
+    "licenseServer": "",
+    "licenseMode": "PerUser",
+    "maxConnections": 50
+  },
+  "networkSettings": {
+    "useDHCP": false,
+    "ipAddress": "192.168.1.20",
+    "subnetMask": "255.255.255.0",
+    "defaultGateway": "192.168.1.1",
+    "preferredDNS": "192.168.1.10"
+  },
+  "advancedOptions": {
+    "installOffice": false,
+    "installRSAT": true,
+    "enableRemoteFX": false,
+    "enableUserProfileDisks": true,
+    "userProfileDiskPath": "\\\\FileServer\\UserProfiles",
+    "userProfileDiskMaxSizeGB": 10
+  },
+  "scripts": {
+    "preDeploymentScript": "",
+    "postDeploymentScript": "",
+    "rdshConfigurationScript": ""
+  },
+  "tags": [
+    "RDSH",
+    "Remote Desktop",
+    "Session Host",
+    "Windows Server",
+    "Default Template"
+  ]
+} 
