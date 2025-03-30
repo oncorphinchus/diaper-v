@@ -1,19 +1,31 @@
 @echo off
-echo Building HyperV Creator Core project...
-
-REM Change to the root directory
-cd /d "%~dp0"
-
-REM Clean build outputs first
-echo Cleaning Core build outputs...
-if exist "src\HyperVCreator.Core\bin" rmdir /s /q "src\HyperVCreator.Core\bin"
-if exist "src\HyperVCreator.Core\obj" rmdir /s /q "src\HyperVCreator.Core\obj"
-
-REM Build the Core project
-echo Building Core project...
-dotnet build "src\HyperVCreator.Core\HyperVCreator.Core.csproj"
+echo Building HyperV Creator Projects...
+cd /d %~dp0
 
 echo.
-echo Build completed.
-echo Press any key to exit...
-pause > nul 
+echo -----------------------------------
+echo Building Core Project...
+echo -----------------------------------
+dotnet build src\HyperVCreator.Core\HyperVCreator.Core.csproj
+if %ERRORLEVEL% NEQ 0 (
+    echo Core Project build failed with code: %ERRORLEVEL%
+    pause
+    exit /b %ERRORLEVEL%
+)
+
+echo.
+echo -----------------------------------
+echo Building App Project...
+echo -----------------------------------
+dotnet build src\HyperVCreator.App\HyperVCreator.App.csproj
+if %ERRORLEVEL% NEQ 0 (
+    echo App Project build failed with code: %ERRORLEVEL%
+    pause
+    exit /b %ERRORLEVEL%
+)
+
+echo.
+echo -----------------------------------
+echo All projects built successfully!
+echo -----------------------------------
+pause 

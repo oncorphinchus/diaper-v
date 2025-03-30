@@ -17,7 +17,7 @@ namespace HyperVCreator.App
             if (!App.Current.Resources.Contains("ThemeService"))
             {
                 var themeService = new ThemeService();
-                themeService.LoadSelectedTheme();
+                ((App)Application.Current).ThemeService.ApplySelectedTheme();
                 App.Current.Resources.Add("ThemeService", themeService);
             }
         }

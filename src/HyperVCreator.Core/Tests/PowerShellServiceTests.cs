@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using HyperVCreator.Core.Services;
+using HyperVCreator.Core.PowerShell;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HyperVCreator.Core.Tests
@@ -28,8 +30,9 @@ namespace HyperVCreator.Core.Tests
             
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("Test Output", result[0]);
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(1, result.Output.Count);
+            Assert.AreEqual("Test Output", result.Output[0]);
         }
         
         [TestMethod]
@@ -47,10 +50,11 @@ namespace HyperVCreator.Core.Tests
             
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Count);
-            Assert.AreEqual("Line 1", result[0]);
-            Assert.AreEqual("Line 2", result[1]);
-            Assert.AreEqual("Line 3", result[2]);
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(3, result.Output.Count);
+            Assert.AreEqual("Line 1", result.Output[0]);
+            Assert.AreEqual("Line 2", result.Output[1]);
+            Assert.AreEqual("Line 3", result.Output[2]);
         }
         
         [TestMethod]
@@ -58,22 +62,15 @@ namespace HyperVCreator.Core.Tests
         {
             // Arrange
             string script = "Write-Error 'Test Error'";
-            bool errorReceived = false;
-            
-            _powerShellService.ErrorReceived += (sender, error) => 
-            {
-                if (error.Contains("Test Error"))
-                {
-                    errorReceived = true;
-                }
-            };
             
             // Act
             var result = await _powerShellService.ExecuteScriptAsync(script);
             
             // Assert
-            Assert.IsTrue(result.Any(r => r.Contains("Error")));
-            Assert.IsTrue(errorReceived);
+            Assert.IsTrue(result.HasErrors);
+            Assert.IsNotNull(result.Errors);
+            Assert.IsTrue(result.Errors.Count > 0);
+            Assert.IsTrue(result.Errors.Any(e => e.ToString().Contains("Test Error")));
         }
         
         [TestMethod]
@@ -90,8 +87,9 @@ namespace HyperVCreator.Core.Tests
             
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("Test Value", result[0]);
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(1, result.Output.Count);
+            Assert.AreEqual("Test Value", result.Output[0]);
         }
         
         [TestMethod]
@@ -110,8 +108,9 @@ namespace HyperVCreator.Core.Tests
             
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("15", result[0]);
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(1, result.Output.Count);
+            Assert.AreEqual("15", result.Output[0]);
         }
         
         [TestMethod]
@@ -132,8 +131,9 @@ namespace HyperVCreator.Core.Tests
             
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("Greater than 5", result[0]);
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(1, result.Output.Count);
+            Assert.AreEqual("Greater than 5", result.Output[0]);
         }
     }
 } 

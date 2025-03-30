@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HyperVCreator.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bd6dc5ae1d36f78ecef5c0526c27f5fa23f37456")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+716a4ad2d0b273d9e42f2da2c395a9460bb813db")]
 [assembly: System.Reflection.AssemblyProductAttribute("HyperVCreator.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HyperVCreator.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

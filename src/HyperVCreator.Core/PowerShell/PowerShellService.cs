@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using Microsoft.PowerShell.Commands;
@@ -259,22 +260,13 @@ namespace HyperVCreator.Core.PowerShell
                     break;
             }
             
-            // Create a progress handler
-            var progressHandler = new Progress<PowerShellStatusUpdate>(update =>
-            {
-                if (progress != null)
-                {
-                    progress.Report(update);
-                }
-            });
-            
-            // Execute the script and track progress
+            // Execute the script and get the result
             var result = await ExecuteScriptAsync(scriptPath, parameters, cancellationToken);
             
-            // Report progress updates
-            foreach (var update in result.StatusUpdates)
+            // Report progress updates manually
+            if (progress != null && result.HasStatusUpdates)
             {
-                if (progress != null)
+                foreach (var update in result.StatusUpdates)
                 {
                     progress.Report(update);
                 }

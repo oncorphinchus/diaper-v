@@ -20,5 +20,8 @@ namespace HyperVCreator.Core.Services
         Task<bool> StopVM(string vmName);
         Task<List<string>> GetAvailableVirtualSwitches();
         Task<bool> CheckHyperVEnabled();
+        
+        List<string> GetVirtualSwitches();
+        bool CreateVM(object vmConfig);
     }
 } 

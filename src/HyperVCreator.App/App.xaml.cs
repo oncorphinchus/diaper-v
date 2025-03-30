@@ -3,6 +3,9 @@ using System.IO;
 using System.Windows;
 using HyperVCreator.App.Services;
 using HyperVCreator.Core.Services;
+using CoreServices = HyperVCreator.Core.Services;
+using CorePowerShell = HyperVCreator.Core.PowerShell;
+using AppServices = HyperVCreator.App.Services;
 
 namespace HyperVCreator.App
 {
@@ -40,11 +43,11 @@ namespace HyperVCreator.App
         private void InitializeServices()
         {
             // Initialize the core services
-            _powerShellService = new Core.PowerShell.PowerShellService();
-            _themeService = new ThemeService();
-            _hyperVService = new Core.Services.HyperVService(_powerShellService);
-            _configurationService = new Core.Services.ConfigurationService(_powerShellService);
-            _templateService = new TemplateService();
+            _powerShellService = new CorePowerShell.PowerShellService();
+            _themeService = new AppServices.ThemeService();
+            _hyperVService = new CoreServices.HyperVService(_powerShellService);
+            _configurationService = new CoreServices.ConfigurationService(_powerShellService);
+            _templateService = new CoreServices.TemplateService(_powerShellService);
         }
         
         /// <summary>

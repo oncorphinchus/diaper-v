@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using HyperVCreator.Core.Models;
+using HyperVCreator.Core.PowerShell;
+using System.Linq;
 
 namespace HyperVCreator.Core.Services
 {
@@ -14,7 +17,7 @@ namespace HyperVCreator.Core.Services
 
         public ConfigurationService(PowerShellService powerShellService)
         {
-            _powerShellService = powerShellService;
+            _powerShellService = powerShellService ?? throw new ArgumentNullException(nameof(powerShellService));
             _settings = new Dictionary<string, object>();
             
             // Set the settings path
@@ -85,8 +88,8 @@ namespace HyperVCreator.Core.Services
                 // Build a simple script that would print success for testing
                 string script = "Write-Output 'Domain Controller configuration succeeded'";
                 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("Domain Controller configuration succeeded");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("Domain Controller configuration succeeded");
             }
             catch (Exception ex)
             {
@@ -102,8 +105,8 @@ namespace HyperVCreator.Core.Services
                 // Build a simple script that would print success for testing
                 string script = "Write-Output 'RDSH configuration succeeded'";
                 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("RDSH configuration succeeded");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("RDSH configuration succeeded");
             }
             catch (Exception ex)
             {
@@ -119,8 +122,8 @@ namespace HyperVCreator.Core.Services
                 // Build a simple script that would print success for testing
                 string script = "Write-Output 'File Server configuration succeeded'";
                 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("File Server configuration succeeded");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("File Server configuration succeeded");
             }
             catch (Exception ex)
             {
@@ -136,8 +139,8 @@ namespace HyperVCreator.Core.Services
                 // Build a simple script that would print success for testing
                 string script = "Write-Output 'Web Server configuration succeeded'";
                 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("Web Server configuration succeeded");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("Web Server configuration succeeded");
             }
             catch (Exception ex)
             {
@@ -153,8 +156,8 @@ namespace HyperVCreator.Core.Services
                 // Build a simple script that would print success for testing
                 string script = "Write-Output 'SQL Server configuration succeeded'";
                 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("SQL Server configuration succeeded");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("SQL Server configuration succeeded");
             }
             catch (Exception ex)
             {
@@ -170,8 +173,8 @@ namespace HyperVCreator.Core.Services
                 // Build a simple script that would print success for testing
                 string script = "Write-Output 'DHCP Server configuration succeeded'";
                 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("DHCP Server configuration succeeded");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("DHCP Server configuration succeeded");
             }
             catch (Exception ex)
             {
@@ -187,8 +190,8 @@ namespace HyperVCreator.Core.Services
                 // Build a simple script that would print success for testing
                 string script = "Write-Output 'DNS Server configuration succeeded'";
                 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("DNS Server configuration succeeded");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("DNS Server configuration succeeded");
             }
             catch (Exception ex)
             {

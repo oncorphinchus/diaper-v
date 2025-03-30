@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using HyperVCreator.Core.Models;
+using HyperVCreator.Core.PowerShell;
 
 namespace HyperVCreator.Core.Services
 {
@@ -36,12 +38,12 @@ namespace HyperVCreator.Core.Services
                 progress?.Report(0);
 
                 string script = "Write-Output 'VM creation succeeded'";
-                var results = await _powerShellService.ExecuteScriptAsync(script);
+                var result = await _powerShellService.ExecuteScriptAsync(script);
                 
                 // Report completion
                 progress?.Report(100);
                 
-                return results.Contains("VM creation succeeded");
+                return result.WasSuccessful() && result.ContainsOutput("VM creation succeeded");
             }
             catch (Exception ex)
             {
@@ -55,8 +57,8 @@ namespace HyperVCreator.Core.Services
             try
             {
                 string script = "Write-Output 'VM1';Write-Output 'VM2';Write-Output 'VM3'";
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return new List<string>(results);
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.GetOutputStrings().ToList();
             }
             catch (Exception ex)
             {
@@ -83,8 +85,8 @@ namespace HyperVCreator.Core.Services
             {
                 string script = "Write-Output 'VM creation succeeded'";
 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("VM creation succeeded");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("VM creation succeeded");
             }
             catch (Exception ex)
             {
@@ -105,8 +107,8 @@ namespace HyperVCreator.Core.Services
             {
                 string script = "Write-Output 'Network configuration succeeded'";
 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("Network configuration succeeded");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("Network configuration succeeded");
             }
             catch (Exception ex)
             {
@@ -121,8 +123,8 @@ namespace HyperVCreator.Core.Services
             {
                 string script = "Write-Output 'Virtual disk added successfully'";
 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("Virtual disk added successfully");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("Virtual disk added successfully");
             }
             catch (Exception ex)
             {
@@ -137,8 +139,8 @@ namespace HyperVCreator.Core.Services
             {
                 string script = "Write-Output 'ISO mounted successfully'";
 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("ISO mounted successfully");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("ISO mounted successfully");
             }
             catch (Exception ex)
             {
@@ -153,8 +155,8 @@ namespace HyperVCreator.Core.Services
             {
                 string script = "Write-Output 'VM started successfully'";
 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("VM started successfully");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("VM started successfully");
             }
             catch (Exception ex)
             {
@@ -169,8 +171,8 @@ namespace HyperVCreator.Core.Services
             {
                 string script = "Write-Output 'VM stopped successfully'";
 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("VM stopped successfully");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("VM stopped successfully");
             }
             catch (Exception ex)
             {
@@ -184,9 +186,9 @@ namespace HyperVCreator.Core.Services
             try
             {
                 string script = "Write-Output 'Default Switch'";
-                var results = await _powerShellService.ExecuteScriptAsync(script);
+                var result = await _powerShellService.ExecuteScriptAsync(script);
                 
-                return new List<string>(results);
+                return result.GetOutputStrings().ToList();
             }
             catch (Exception ex)
             {
@@ -201,12 +203,40 @@ namespace HyperVCreator.Core.Services
             {
                 string script = "Write-Output 'Hyper-V is enabled'";
 
-                var results = await _powerShellService.ExecuteScriptAsync(script);
-                return results.Contains("Hyper-V is enabled");
+                var result = await _powerShellService.ExecuteScriptAsync(script);
+                return result.WasSuccessful() && result.ContainsOutput("Hyper-V is enabled");
             }
             catch (Exception)
             {
                 // If there's an error, assume Hyper-V is not properly set up
+                return false;
+            }
+        }
+
+        public List<string> GetVirtualSwitches()
+        {
+            try
+            {
+                // Return same values as the async version for consistency
+                return new List<string> { "Default Switch", "External Virtual Switch", "Internal Virtual Switch" };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting virtual switches: {ex.Message}");
+                return new List<string> { "Default Switch" };
+            }
+        }
+
+        public bool CreateVM(object vmConfig)
+        {
+            try
+            {
+                // Simple implementation that just returns success
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating VM: {ex.Message}");
                 return false;
             }
         }

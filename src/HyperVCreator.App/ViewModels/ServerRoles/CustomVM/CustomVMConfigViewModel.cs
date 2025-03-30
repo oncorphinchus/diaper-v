@@ -802,7 +802,7 @@ else {
                 
                 var result = await _powerShellService.ExecuteScriptAsync(script, _cancellationTokenSource.Token);
                 
-                if (result != null && result.Any(r => r.Contains("Success") && r.Contains("true")))
+                if (result != null && result.AsEnumerable().Any(r => r.ToString().Contains("Success") && r.ToString().Contains("true")))
                 {
                     StatusMessage = $"Custom VM '{VMName}' created successfully!";
                     ProgressValue = 100;

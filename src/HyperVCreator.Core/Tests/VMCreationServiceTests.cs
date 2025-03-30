@@ -220,7 +220,13 @@ namespace HyperVCreator.Core.Tests
         {
             // Create a mock CustomVM.ps1 script
             var scriptPath = Path.Combine(_scriptsDirectory, "RoleConfiguration", "CustomVM.ps1");
-            Directory.CreateDirectory(Path.GetDirectoryName(scriptPath));
+            var directoryPath = Path.GetDirectoryName(scriptPath);
+            
+            // Ensure directory exists before creating the file
+            if (!string.IsNullOrEmpty(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
             
             // Simple script that returns success and status updates
             string scriptContent = @"

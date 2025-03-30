@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
+using System.Linq;
 
 namespace HyperVCreator.Core.PowerShell
 {
@@ -73,6 +74,40 @@ namespace HyperVCreator.Core.PowerShell
         /// Gets the last percentage complete value
         /// </summary>
         public int LastPercentComplete => HasStatusUpdates ? StatusUpdates[StatusUpdates.Count - 1].PercentComplete : 0;
+        
+        /// <summary>
+        /// Gets string values from the Output collection - for backwards compatibility
+        /// </summary>
+        public IEnumerable<string> GetStringValues()
+        {
+            return Output.Select(o => o?.ToString()).Where(s => s != null);
+        }
+        
+        /// <summary>
+        /// Gets the output collection as an enumerable - replacement for the implicit operator
+        /// </summary>
+        /// <returns>The output collection</returns>
+        public IEnumerable<PSObject> AsEnumerable()
+        {
+            return Output ?? new List<PSObject>();
+        }
+        
+        /// <summary>
+        /// Allows indexing into the Output collection directly - for backwards compatibility
+        /// </summary>
+        /// <param name="index">The index to access</param>
+        /// <returns>The PSObject at the specified index</returns>
+        public PSObject this[int index]
+        {
+            get
+            {
+                if (Output == null || index < 0 || index >= Output.Count)
+                {
+                    return null;
+                }
+                return Output[index];
+            }
+        }
     }
 
     /// <summary>

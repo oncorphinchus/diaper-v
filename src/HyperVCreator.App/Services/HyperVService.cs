@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HyperVCreator.Core.Services;
+using CorePowerShell = HyperVCreator.Core.PowerShell;
 
 namespace HyperVCreator.App.Services
 {
     public class HyperVService : IHyperVService
     {
-        private readonly PowerShellService _powerShellService;
+        private readonly CorePowerShell.PowerShellService _powerShellService;
         
-        public HyperVService(PowerShellService powerShellService)
+        public HyperVService(CorePowerShell.PowerShellService powerShellService)
         {
             _powerShellService = powerShellService ?? throw new ArgumentNullException(nameof(powerShellService));
         }
@@ -87,6 +88,18 @@ namespace HyperVCreator.App.Services
         }
         
         public async Task<bool> CheckHyperVEnabled()
+        {
+            // Simple implementation that just returns success
+            return true;
+        }
+        
+        public List<string> GetVirtualSwitches()
+        {
+            // Simple implementation that just returns some dummy switches
+            return new List<string> { "Default Switch", "External Virtual Switch", "Internal Virtual Switch" };
+        }
+        
+        public bool CreateVM(object vmConfig)
         {
             // Simple implementation that just returns success
             return true;

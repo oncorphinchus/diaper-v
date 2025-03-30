@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using HyperVCreator.Core.Models;
+using HyperVCreator.Core.PowerShell;
 
 namespace HyperVCreator.Core.Services
 {
@@ -318,7 +319,7 @@ namespace HyperVCreator.Core.Services
                     try
                     {
                         string json = File.ReadAllText(file);
-                        VMTemplate template = JsonSerializer.Deserialize<VMTemplate>(json, _jsonOptions);
+                        VMTemplate? template = JsonSerializer.Deserialize<VMTemplate>(json, _jsonOptions);
                         
                         if (template != null && !string.IsNullOrWhiteSpace(template.TemplateName))
                         {

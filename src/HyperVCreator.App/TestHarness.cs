@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HyperVCreator.Core.Models;
 using HyperVCreator.Core.Services;
+using CorePowerShell = HyperVCreator.Core.PowerShell;
 
 namespace HyperVCreator.App
 {
@@ -15,7 +16,7 @@ namespace HyperVCreator.App
     public class TestHarness
     {
         // Services
-        private readonly Core.PowerShell.PowerShellService _powerShellService;
+        private readonly CorePowerShell.PowerShellService _powerShellService;
         private readonly Core.Services.HyperVService _hyperVService;
         private readonly Core.Services.ConfigurationService _configurationService;
         private readonly TemplateService _templateService;
@@ -29,15 +30,14 @@ namespace HyperVCreator.App
             try
             {
                 // Initialize services
-                _powerShellService = new Core.PowerShell.PowerShellService();
+                _powerShellService = new CorePowerShell.PowerShellService();
                 _hyperVService = new Core.Services.HyperVService(_powerShellService);
                 _configurationService = new Core.Services.ConfigurationService(_powerShellService);
                 _templateService = new TemplateService();
                 _themeService = new ThemeService();
                 
-                // Register event handlers
-                _powerShellService.OutputReceived += (s, e) => Console.WriteLine($"PowerShell Output: {e}");
-                _powerShellService.ErrorReceived += (s, e) => Console.WriteLine($"PowerShell Error: {e}");
+                // PowerShell service doesn't have events anymore, we'll handle output in the results
+                Console.WriteLine("PowerShell service initialized.");
             }
             catch (Exception ex)
             {

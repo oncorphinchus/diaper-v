@@ -109,15 +109,37 @@ namespace HyperVCreator.App
             
             try
             {
-                _powerShellService.OutputReceived += (s, e) => Console.WriteLine($"Output: {e}");
-                _powerShellService.ErrorReceived += (s, e) => Console.WriteLine($"Error: {e}");
+                // PowerShellService doesn't have events anymore
                 
-                var results = await _powerShellService.ExecuteScriptAsync("Get-Process | Select-Object -First 5");
+                var result = await _powerShellService.ExecuteScriptAsync("Get-Process | Select-Object -First 5");
                 
                 Console.WriteLine("\nResults:");
-                foreach (var result in results)
+                if (result != null)
                 {
-                    Console.WriteLine($"- {result}");
+                    if (result.Success)
+                    {
+                        Console.WriteLine("PowerShell execution succeeded");
+                        
+                        if (result.Output != null)
+                        {
+                            foreach (var output in result.Output)
+                            {
+                                Console.WriteLine($"- {output}");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"PowerShell execution failed: {result.Message}");
+                        
+                        if (result.Errors != null)
+                        {
+                            foreach (var error in result.Errors)
+                            {
+                                Console.WriteLine($"Error: {error}");
+                            }
+                        }
+                    }
                 }
                 
                 Console.WriteLine("\nPowerShell test completed successfully.");
